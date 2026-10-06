@@ -1,0 +1,15 @@
+[ ca ]
+default_ca = CA_default
+
+[ CA_default ]
+database = ./index.txt
+serial = ./serial
+new_certs_dir = ./newcerts
+certificate = ../certs/ca.crt
+private_key = ../certs/ca.key
+default_md = sha256
+policy = policy_any
+default_days = 365
+
+[ policy_any ]
+commonName = supplied
