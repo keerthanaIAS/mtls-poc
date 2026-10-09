@@ -15,7 +15,7 @@ const options = {
 };
 
 https.createServer(options, (req, res) => {
-  const clientCert = req.socket.getPeerCertificate();
+  const clientCert = req.socket.getPeerCertificate(); // retrieve the parsed client certificate object inside the request handler
 
   console.log('Client certificate subject:', clientCert.subject);
 

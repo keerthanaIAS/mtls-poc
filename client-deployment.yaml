@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mtls-client
+  namespace: mtls-poc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mtls-client
+  template:
+    metadata:
+      labels:
+        app: mtls-client
+    spec:
+      containers:
+        - name: mtls-client
+          image: mtls-client:latest
+          imagePullPolicy: Never
+          env:
+            - name: USE_CLIENT_CERT
+              value: "true"
+          volumeMounts:
+            - name: mtls-certs
+              mountPath: /certs
+              readOnly: true
+      volumes:
+        - name: mtls-certs
+          secret:
+            secretName: mtls-client-certs

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mtls-server
+  namespace: mtls-poc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mtls-server
+  template:
+    metadata:
+      labels:
+        app: mtls-server
+    spec:
+      containers:
+        - name: mtls-server
+          image: mtls-server:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3001
+          volumeMounts:
+            - name: mtls-certs
+              mountPath: /certs
+              readOnly: true
+      volumes:
+        - name: mtls-certs
+          secret:
+            secretName: mtls-server-certs
