@@ -1,0 +1,2 @@
+subjectAltName=DNS:transaction-ms,DNS:transaction-ms.mtls-services.svc,DNS:transaction-ms.mtls-services.svc.cluster.local
+extendedKeyUsage=serverAuth

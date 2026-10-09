@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transaction-ms
+  namespace: mtls-services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transaction-ms
+  template:
+    metadata:
+      labels:
+        app: transaction-ms
+    spec:
+      containers:
+        - name: transaction-ms
+          image: mtls-transaction-ms:poc
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8443
+          readinessProbe:
+            tcpSocket:
+              port: 8443
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          volumeMounts:
+            - name: certs
+              mountPath: /certs
+              readOnly: true
+      volumes:
+        - name: certs
+          secret:
+            secretName: transaction-ms-certs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transaction-ms
+  namespace: mtls-services
+spec:
+  selector:
+    app: transaction-ms
+  ports:
+    - port: 8443
+      targetPort: 8443
+  type: ClusterIP

@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: untrusted-client-test
+  namespace: mtls-services
+spec:
+  restartPolicy: Never
+  containers:
+    - name: test
+      image: mtls-root-ms:poc
+      imagePullPolicy: Never
+      command: ["node", "-e"]
+      args:
+        - |
+          const https = require("https");
+          const fs = require("fs");
+
+          const req = https.get({
+            hostname: "transaction-ms.mtls-services.svc.cluster.local",
+            port: 8443,
+            path: "/api/transaction",
+            key: fs.readFileSync("/certs/tls.key"),
+            cert: fs.readFileSync("/certs/tls.crt"),
+            ca: fs.readFileSync("/certs/ca.crt"),
+            rejectUnauthorized: true,
+            timeout: 5000
+          }, res => {
+            console.error("FAIL: Unexpected HTTP response:", res.statusCode);
+            res.resume();
+            process.exitCode = 1;
+          });
+
+          req.on("error", err => {
+            console.log("Expected rejection of untrusted client:", err.message);
+          });
+
+          req.on("timeout", () => req.destroy(new Error("Timeout")));
+      volumeMounts:
+        - name: certs
+          mountPath: /certs
+          readOnly: true
+  volumes:
+    - name: certs
+      secret:
+        secretName: untrusted-client-certs
