@@ -907,3 +907,487 @@ cat root-ms/Dockerfile
 cat transaction-ms/Dockerfile
 
 2. Step 2 — Build and start the Podman services:
+
+cd /Users/keerthana/Desktop/mtls-poc/service-to-service
+
+echo "========== 1. CREATE ISOLATED PODMAN FILES =========="
+
+mkdir -p podman-runtime/root-ms
+mkdir -p podman-runtime/transaction-ms
+mkdir -p podman-runtime/certs/root-ms
+mkdir -p podman-runtime/certs/transaction-ms
+
+cp root-ms/Dockerfile podman-runtime/root-ms/Dockerfile
+cp transaction-ms/Dockerfile podman-runtime/transaction-ms/Dockerfile
+
+# Use Podman network DNS instead of Kubernetes Service DNS.
+sed 's/transaction-ms\.mtls-services\.svc\.cluster\.local/transaction-ms/g' \
+  root-ms/server.js > podman-runtime/root-ms/server.js
+
+cp transaction-ms/server.js podman-runtime/transaction-ms/server.js
+
+# Copy only the certificates needed by the two services.
+cp certs/root-ms/tls.crt podman-runtime/certs/root-ms/
+cp certs/root-ms/tls.key podman-runtime/certs/root-ms/
+cp certs/ca/ca.crt podman-runtime/certs/root-ms/ca.crt
+
+cp certs/transaction-ms/tls.crt podman-runtime/certs/transaction-ms/
+cp certs/transaction-ms/tls.key podman-runtime/certs/transaction-ms/
+cp certs/ca/ca.crt podman-runtime/certs/transaction-ms/ca.crt
+
+# Make the isolated certificate copies readable by the container's node user.
+chmod 0444 podman-runtime/certs/root-ms/tls.key
+chmod 0444 podman-runtime/certs/transaction-ms/tls.key
+
+echo "========== 2. VERIFY PODMAN TARGET =========="
+grep -nE 'transaction-ms|https.request|tls.key|tls.crt|ca.crt' \
+  podman-runtime/root-ms/server.js
+
+3. Step 3 — Build separate Podman images:
+
+cd /Users/keerthana/Desktop/mtls-poc/service-to-service
+
+echo "========== BUILD ROOT-MS =========="
+podman build -t localhost/mtls-root-ms-podman:poc \
+  ./podman-runtime/root-ms || exit 1
+
+echo "========== BUILD TRANSACTION-MS =========="
+podman build -t localhost/mtls-transaction-ms-podman:poc \
+  ./podman-runtime/transaction-ms || exit 1
+
+echo "========== VERIFY IMAGES =========="
+podman images | grep -E 'mtls-root-ms-podman|mtls-transaction-ms-podman'
+
+4. Step 4 — Create the isolated network and start containers:
+
+cd /Users/keerthana/Desktop/mtls-poc/service-to-service
+
+echo "========== CREATE PODMAN NETWORK =========="
+podman network create mtls-podman-net || exit 1
+
+echo "========== START TRANSACTION-MS =========="
+podman run -d \
+  --name mtls-transaction-ms-podman \
+  --network mtls-podman-net \
+  --network-alias transaction-ms \
+  -v "$PWD/podman-runtime/certs/transaction-ms:/certs:ro" \
+  localhost/mtls-transaction-ms-podman:poc || exit 1
+
+echo "========== START ROOT-MS =========="
+podman run -d \
+  --name mtls-root-ms-podman \
+  --network mtls-podman-net \
+  -p 3101:3001 \
+  -v "$PWD/podman-runtime/certs/root-ms:/certs:ro" \
+  localhost/mtls-root-ms-podman:poc || exit 1
+
+echo "========== CONTAINER STATUS =========="
+podman ps -a --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
+
+echo "========== TRANSACTION-MS LOGS =========="
+podman logs mtls-transaction-ms-podman
+
+echo "========== ROOT-MS LOGS =========="
+podman logs mtls-root-ms-podman
+
+5. Step 5 — Verify mTLS communication:
+
+echo "========== ROOT-MS HEALTH =========="
+curl -i http://localhost:3101/health
+
+echo "========== ROOT-MS TO TRANSACTION-MS =========="
+curl -i http://localhost:3101/call-transaction
+
+6. Run the same load test:
+
+cd /Users/keerthana/Desktop/mtls-poc/service-to-service
+
+podman exec mtls-root-ms-podman node -e '
+const http = require("http");
+const total = 1000;
+const concurrency = 20;
+let started = 0, completed = 0, success = 0, failed = 0;
+const latencies = [];
+const startTime = process.hrtime.bigint();
+
+function request() {
+  if (started >= total) return;
+  started++;
+  const t0 = process.hrtime.bigint();
+
+  const req = http.get("http://127.0.0.1:3001/call-transaction", res => {
+    res.resume();
+    res.on("end", () => {
+      const ms = Number(process.hrtime.bigint() - t0) / 1e6;
+      latencies.push(ms);
+      if (res.statusCode === 200) success++;
+      else failed++;
+      completed++;
+      if (completed === total) report();
+      else request();
+    });
+  });
+
+  req.setTimeout(10000, () => req.destroy(new Error("timeout")));
+  req.on("error", () => {
+    failed++;
+    completed++;
+    if (completed === total) report();
+    else request();
+  });
+}
+
+function percentile(values, p) {
+  const sorted = [...values].sort((a, b) => a - b);
+  return sorted[Math.ceil(p * sorted.length) - 1] ?? 0;
+}
+
+function report() {
+  const seconds = Number(process.hrtime.bigint() - startTime) / 1e9;
+  console.log("========== PODMAN mTLS LOAD TEST ==========");
+  console.log("Total requests:", total);
+  console.log("Concurrency:", concurrency);
+  console.log("Successful HTTP 200:", success);
+  console.log("Failed:", failed);
+  console.log("Duration seconds:", seconds.toFixed(2));
+  console.log("Requests/sec:", (total / seconds).toFixed(2));
+  console.log("Latency average ms:", (latencies.reduce((a,b)=>a+b,0) / (latencies.length || 1)).toFixed(2));
+  console.log("Latency p50 ms:", percentile(latencies, 0.50).toFixed(2));
+  console.log("Latency p95 ms:", percentile(latencies, 0.95).toFixed(2));
+  console.log("Latency p99 ms:", percentile(latencies, 0.99).toFixed(2));
+  console.log("Latency max ms:", Math.max(0, ...latencies).toFixed(2));
+}
+
+for (let i = 0; i < concurrency; i++) request();
+'
+
+**Your Podman mTLS load test completed successfully. All 1,000 requests succeeded, with zero failures**.
+
+## 1. Podman load-test results
+
+Successful requests
+
+# 1,000 / 1,000
+
+Throughput
+
+# 419.16 requests/sec
+
+Average latency
+
+# 47.43 ms
+
+P95 latency
+
+## 60.76 ms
+
+P99 latency
+
+## 79.99 ms
+
+Concurrency: 20 · Duration: 2.39 seconds · Maximum latency: 83.09 ms
+
+## 2. Compare with the earlier Kubernetes test
+
+| Metric              | Kubernetes baseline | Podman   |
+| ------------------- | ------------------- | -------- |
+| Requests            | 1,000               | 1,000    |
+| Concurrency         | 20                  | 20       |
+| Successful requests | 1,000               | 1,000    |
+| Requests/sec        | 268.96              | 419.16   |
+| Average latency     | 73.64 ms            | 47.43 ms |
+| P95 latency         | 97 ms               | 60.76 ms |
+| P99 latency         | 109 ms              | 79.99 ms |
+
+In this particular run, *Podman achieved about 56% higher throughput* and 36% lower average latency than the earlier Kubernetes baseline.
+
+**Build separate Docker images**:
+
+cd /Users/keerthana/Desktop/mtls-poc/service-to-service
+
+echo "========== BUILD DOCKER ROOT-MS =========="
+docker build -t localhost/mtls-root-ms-docker:poc \
+  ./podman-runtime/root-ms || exit 1
+
+echo "========== BUILD DOCKER TRANSACTION-MS =========="
+docker build -t localhost/mtls-transaction-ms-docker:poc \
+  ./podman-runtime/transaction-ms || exit 1
+
+**Start Docker containers**: 
+
+cd /Users/keerthana/Desktop/mtls-poc/service-to-service
+
+echo "========== CREATE DOCKER NETWORK =========="
+docker network create mtls-docker-net || exit 1
+
+echo "========== START TRANSACTION-MS =========="
+docker run -d \
+  --name mtls-transaction-ms-docker \
+  --network mtls-docker-net \
+  --network-alias transaction-ms \
+  -v "$PWD/podman-runtime/certs/transaction-ms:/certs:ro" \
+  localhost/mtls-transaction-ms-docker:poc || exit 1
+
+echo "========== START ROOT-MS =========="
+docker run -d \
+  --name mtls-root-ms-docker \
+  --network mtls-docker-net \
+  -p 3201:3001 \
+  -v "$PWD/podman-runtime/certs/root-ms:/certs:ro" \
+  localhost/mtls-root-ms-docker:poc || exit 1
+
+echo "========== DOCKER CONTAINER STATUS =========="
+docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
+
+echo "========== TRANSACTION-MS LOGS =========="
+docker logs mtls-transaction-ms-docker
+
+echo "========== ROOT-MS LOGS =========="
+docker logs mtls-root-ms-docker
+
+**Step 3 — Verify Docker mTLS before load testing**:
+
+echo "========== DOCKER ROOT-MS HEALTH =========="
+curl -i http://localhost:3201/health
+
+echo
+echo "========== DOCKER SERVER-TO-SERVER mTLS =========="
+curl -i http://localhost:3201/call-transaction
+
+**Step 4 — Run the same load test**:
+
+
+docker exec mtls-root-ms-docker node -e '
+const http = require("http");
+const total = 1000;
+const concurrency = 20;
+let started = 0, completed = 0, success = 0, failed = 0;
+const latencies = [];
+const startTime = process.hrtime.bigint();
+
+function request() {
+  if (started >= total) return;
+  started++;
+  const t0 = process.hrtime.bigint();
+
+  const req = http.get("http://127.0.0.1:3001/call-transaction", res => {
+    res.resume();
+    res.on("end", () => {
+      latencies.push(Number(process.hrtime.bigint() - t0) / 1e6);
+      if (res.statusCode === 200) success++;
+      else failed++;
+      completed++;
+      if (completed === total) report();
+      else request();
+    });
+  });
+
+  req.setTimeout(10000, () => req.destroy(new Error("timeout")));
+  req.on("error", () => {
+    failed++;
+    completed++;
+    if (completed === total) report();
+    else request();
+  });
+}
+
+function percentile(values, p) {
+  const sorted = [...values].sort((a, b) => a - b);
+  return sorted[Math.ceil(p * sorted.length) - 1] ?? 0;
+}
+
+function report() {
+  const seconds = Number(process.hrtime.bigint() - startTime) / 1e9;
+  console.log("========== DOCKER mTLS LOAD TEST ==========");
+  console.log("Total requests:", total);
+  console.log("Concurrency:", concurrency);
+  console.log("Successful HTTP 200:", success);
+  console.log("Failed:", failed);
+  console.log("Duration seconds:", seconds.toFixed(2));
+  console.log("Requests/sec:", (total / seconds).toFixed(2));
+  console.log("Latency average ms:", (latencies.reduce((a,b)=>a+b,0) / (latencies.length || 1)).toFixed(2));
+  console.log("Latency p50 ms:", percentile(latencies, 0.50).toFixed(2));
+  console.log("Latency p95 ms:", percentile(latencies, 0.95).toFixed(2));
+  console.log("Latency p99 ms:", percentile(latencies, 0.99).toFixed(2));
+  console.log("Latency max ms:", Math.max(0, ...latencies).toFixed(2));
+}
+
+for (let i = 0; i < concurrency; i++) request();
+'
+
+*Docker vs. Podman results*:
+## Docker vs. Podman results
+
+Both tests used the same mTLS application, 1,000 requests, and concurrency 20.
+
+| Metric              | Docker       | Podman       |
+| ------------------- | ------------ | ------------ |
+| Successful requests | 1,000        | 1,000        |
+| Failed requests     | 0            | 0            |
+| Duration            | 2.45 s       | 2.39 s       |
+| Throughput          | 408.50 req/s | 419.16 req/s |
+| Average latency     | 48.68 ms     | 47.43 ms     |
+| P50 latency         | 47.47 ms     | 45.80 ms     |
+| P95 latency         | 62.25 ms     | 60.76 ms     |
+| P99 latency         | 76.54 ms     | 79.99 ms     |
+| Maximum latency     | 78.25 ms     | 83.09 ms     |
+
+Conclusion: Docker and Podman are performing very similarly in this test. Podman has about 2.6% higher throughput, while Docker has slightly better P99 and maximum latency. One run is not enough to establish a consistent performance winner.
+
+#### Increase the load:
+
+Your 5,000-request test completed successfully for both Docker and Podman. All 10,000 requests returned HTTP 200, with zero failures.
+
+## 1. Results comparison
+
+| Metric          | Docker       | Podman       | Better result |
+| --------------- | ------------ | ------------ | ------------- |
+| Total requests  | 5,000        | 5,000        | Equal         |
+| Failed requests | 0            | 0            | Equal         |
+| Duration        | 11.20 s      | 10.49 s      | Podman        |
+| Throughput      | 446.42 req/s | 476.73 req/s | Podman        |
+| Average latency | 111.62 ms    | 104.56 ms    | Podman        |
+| P50 latency     | 107.41 ms    | 104.27 ms    | Podman        |
+| P95 latency     | 144.45 ms    | 125.12 ms    | Podman        |
+| P99 latency     | 196.39 ms    | 151.78 ms    | Podman        |
+| Maximum latency | 303.11 ms    | 195.61 ms    | Podman        |
+
+# repeat the same test:
+
+**increase the load to 10,000 requests at concurrency 100**:
+
+## 1. Results at 5,000 requests, concurrency 50
+
+| Metric          | First run: Docker | First run: Podman | Repeat: Docker | Repeat: Podman |
+| --------------- | ----------------- | ----------------- | -------------- | -------------- |
+| Requests/sec    | 446.42            | 476.73            | 493.63         | 442.93         |
+| Average latency | 111.62 ms         | 104.56 ms         | 101.08 ms      | 112.53 ms      |
+| P95 latency     | 144.45 ms         | 125.12 ms         | 124.37 ms      | 159.24 ms      |
+| P99 latency     | 196.39 ms         | 151.78 ms         | 166.31 ms      | 193.68 ms      |
+| Failed          | 0                 | 0                 | 0              | 0              |
+
+The winner changed between runs, which suggests run-to-run variation matters.
+
+## 2. Results at 10,000 requests, concurrency 100
+
+| Metric              | Docker    | Podman    |
+| ------------------- | --------- | --------- |
+| Successful HTTP 200 | 10,000    | 10,000    |
+| Failed              | 0         | 0         |
+| Duration            | 19.98 s   | 21.38 s   |
+| Requests/sec        | 500.59    | 467.74    |
+| Average latency     | 199.43 ms | 213.34 ms |
+| P50 latency         | 198.06 ms | 209.69 ms |
+| P95 latency         | 249.16 ms | 264.24 ms |
+| P99 latency         | 317.75 ms | 352.37 ms |
+| Maximum latency     | 347.00 ms | 411.73 ms |
+
+At this load, Docker delivered approximately 7.0% higher throughput and 6.5% lower average latency than Podman. Both still completed all requests successfully.
+
+*Docker performed better in the repeat baseline and at 10,000 requests with concurrency 100. Podman performed better in the first 5,000-request*
+
+**Current conclusion for your POC**:
+- Both engines successfully handled 5,000 requests at concurrency 50 and 10,000 requests at concurrency 100.
+- Neither test showed request failures.
+- Docker was faster in the repeat baseline and the 10,000-request test.
+- More repeated runs and resource measurements are needed before making a final performance recommendation.
+
+## 1. Latest test results: 10,000 requests, concurrency 100
+
+| Metric          | Docker — previous run | Docker — latest | Podman — previous run | Podman — latest |
+| --------------- | --------------------- | --------------- | --------------------- | --------------- |
+| Requests/sec    | 500.59                | 485.89          | 467.74                | 498.44          |
+| Average latency | 199.43 ms             | 205.48 ms       | 213.34 ms             | 200.08 ms       |
+| P95 latency     | 249.16 ms             | 256.05 ms       | 264.24 ms             | 236.44 ms       |
+| P99 latency     | 317.75 ms             | 314.90 ms       | 352.37 ms             | 259.57 ms       |
+| Max latency     | 347.00 ms             | 358.07 ms       | 411.73 ms             | 343.83 ms       |
+| Failed requests | 0                     | 0               | 0                     | 0               |
+
+In the latest run, Podman achieved about 2.6% higher throughput and 2.6% lower average latency than Docker. Its P95 and P99 latency were also lower.
+
+## 2. What we can conclude so far
+* Both engines successfully handled 10,000 requests at concurrency 100.
+* Neither engine showed request failures in either run.
+* The performance winner changes between runs, so the current results do not establish a consistent advantage for either engine.
+* At higher concurrency, average latency increased to around 200 ms for both engines.
+
+## 3. Next: measure CPU and memory
+
+Metric                  Docker          Podman
+Total requests          10000           10000
+Concurrency             100             100
+HTTP 200                10000           10000
+Failed                  0               0
+Duration                21.08 s         21.73 s
+Requests/sec            474.48          460.15
+Average latency         210.32 ms       216.75 ms
+P50 latency             209.93 ms       214.37 ms
+P95 latency             254.17 ms       260.95 ms
+P99 latency             286.84 ms       304.76 ms
+Maximum latency         334.56 ms       347.96 ms
+
+*Docker was approximately 3.1% faster in throughput and had approximately 3.0% lower average latency in this run. Both engines completed all requests without failures.*
+
+**Current conclusion**: Across the runs, the performance winner has changed, although Docker has performed better in the most recent 10,000-request tests.
+
+#### Observed:
+
+Metric                  Docker          Podman          Difference
+Average throughput      505.99 req/s    494.53 req/s    Podman 2.3% lower
+Average latency         197.19 ms       201.71 ms       Podman 2.3% higher
+Average P95 latency     236.44 ms       232.78 ms       Podman slightly better
+Average P99 latency     268.57 ms       285.38 ms       Podman 5.9% higher
+Failed requests         0               0               No difference
+
+##### What did your actual results show?
+
+Metric                  Docker       Podman
+Throughput              505.99       494.53 req/s
+Average latency         197.19 ms    201.71 ms
+P95 latency             236.44 ms    232.78 ms
+P99 latency             268.57 ms    285.38 ms
+Failed requests         0            0
+
+*Docker was about 2.3% faster in average throughput, and its average latency was about 2.2% lower. However, Podman had slightly better average P95 latency.*
+
+**Here is what that means**:
+* Throughput: Docker handled about 11 more requests per second.
+* Average latency: Docker responded about 4.5 milliseconds faster on average.
+* P95 latency: Podman was about 3.7 milliseconds faster for requests at the 95th percentile.
+* P99 latency: Docker was about 16.8 milliseconds faster at the 99th percentile.
+* Failed requests: Both completed all 10,000 requests successfully.
+
+**So, which is better**?
+Docker was slightly faster overall in these tests, but both engines worked successfully.
+
+###### Last Load Test:
+In this POC, Docker performed better than Podman in *throughput and average latency*, but the difference was relatively small.
+
+| Metric                        | Docker       | Podman       | Better result |
+| ----------------------------- | ------------ | ------------ | ------------- |
+| Throughput at concurrency 100 | 527.25 req/s | 500.66 req/s | Docker        |
+| Throughput at concurrency 200 | 538.65 req/s | 506.53 req/s | Docker        |
+| Throughput at concurrency 500 | 512.82 req/s | 482.04 req/s | Docker        |
+| Failed requests               | 0            | 0            | Tie           |
+| mTLS verification             | Passed       | Passed       | Tie           |
+
+Final conclusion:
+
+- Performance: Docker was about 5–6% faster in throughput in these tests.
+- Security: Both passed the mTLS tests performed, including rejection of connections without a client certificate.
+- Reliability: Both completed all load-test requests without failures.
+- Overall: Docker wins on measured performance, but this test does not prove Docker is universally better than Podman. Podman remains viable; its suitability depends on your performance requirements and operational needs.
+
+Docker also had *lower average latency* than Podman at all three concurrency levels.
+
+| Concurrency | Docker avg. latency | Podman avg. latency | Lower latency |
+| ----------- | ------------------- | ------------------- | ------------- |
+| 100         | 189.41 ms           | 199.34 ms           | Docker        |
+| 200         | 370.02 ms           | 393.43 ms           | Docker        |
+| 500         | 969.07 ms           | 1,030.68 ms         | Docker        |
+
+Averages are calculated from the three trials at each concurrency level.
+
+Latency conclusion: Docker was approximately 5% faster at concurrency 100, 6% at 200, and 6% at 500 based on average latency.
+
+As concurrency increased, latency rose significantly for both engines, while throughput stayed near 500 requests/sec. Docker was faster in this test, but both engines completed all requests without failures.
