@@ -1,0 +1,11 @@
+Resource snapshot: 2026-10-12 12:45:02
+
+=== Docker ===
+CONTAINER ID   NAME                         CPU %     MEM USAGE / LIMIT     MEM %     NET I/O         BLOCK I/O     PIDS
+af7a1609b656   mtls-root-ms-docker          0.00%     53.46MiB / 7.748GiB   0.67%     132MB / 291MB   16.4kB / 0B   11
+f12d27434804   mtls-transaction-ms-docker   0.00%     34.89MiB / 7.748GiB   0.44%     289MB / 131MB   12.3kB / 0B   7
+
+=== Podman ===
+ID            NAME                        CPU %       MEM USAGE / LIMIT  MEM %       NET IO             BLOCK IO      PIDS        CPU TIME      AVG CPU %
+d6a56cb6ccbb  mtls-root-ms-podman         8.14%       55.62MB / 8.289GB  0.67%       153.9MB / 310.1MB  8.192kB / 0B  11          5m1.939774s   8.14%
+69bdec3f8304  mtls-transaction-ms-podman  2.16%       37.45MB / 8.289GB  0.45%       289.2MB / 131MB    4.096kB / 0B  7           1m19.989655s  2.16%

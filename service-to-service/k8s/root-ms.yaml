@@ -29,7 +29,7 @@ spec:
       volumes:
         - name: certs
           secret:
-            secretName: root-ms-certs
+            secretName: root-ms-tls
 ---
 apiVersion: v1
 kind: Service

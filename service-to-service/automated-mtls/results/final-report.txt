@@ -1,0 +1,48 @@
+Automated mTLS Evaluation Report
+Generated: 2026-10-12 12:45:33
+
+=== Test status history ===
+timestamp,test,status,details
+"2026-10-12 12:25:46","environment-check","PASS","Required commands; containers and certificate files found"
+"2026-10-12 12:29:33","certificate-validation","PASS","Certificate parses; is currently valid; key matches and CA verification succeeds"
+"2026-10-12 12:30:03","positive-mtls-docker","PASS","Root endpoint returned HTTP 200"
+"2026-10-12 12:30:03","positive-mtls-podman","PASS","Root endpoint returned HTTP 200"
+"2026-10-12 12:41:56","missing-client-cert-docker","PASS","TLS connection rejected without client certificate"
+"2026-10-12 12:41:56","missing-client-cert-podman","PASS","TLS connection rejected without client certificate"
+"2026-10-12 12:42:34","service-call-docker","PASS","HTTP 200; expected client identity and TLS version verified"
+"2026-10-12 12:42:34","service-call-podman","PASS","HTTP 200; expected client identity and TLS version verified"
+"2026-10-12 12:43:13","load-docker-c10","PASS","1000/1000 requests returned HTTP 200; approximate RPS=83.33"
+"2026-10-12 12:43:27","load-podman-c10","PASS","1000/1000 requests returned HTTP 200; approximate RPS=76.92"
+"2026-10-12 12:43:41","load-docker-c50","PASS","1000/1000 requests returned HTTP 200; approximate RPS=71.43"
+"2026-10-12 12:43:56","load-podman-c50","PASS","1000/1000 requests returned HTTP 200; approximate RPS=76.92"
+"2026-10-12 12:44:13","load-docker-c100","PASS","1000/1000 requests returned HTTP 200; approximate RPS=66.67"
+"2026-10-12 12:44:31","load-podman-c100","PASS","1000/1000 requests returned HTTP 200; approximate RPS=62.50"
+"2026-10-12 12:45:04","resource-snapshot","PASS","Docker and Podman resource snapshots saved"
+
+=== Load-test results ===
+engine,concurrency,requests,successes,failures,elapsed_seconds,requests_per_second
+"docker",10,1000,1000,0,12,83.33
+"podman",10,1000,1000,0,13,76.92
+"docker",50,1000,1000,0,14,71.43
+"podman",50,1000,1000,0,13,76.92
+"docker",100,1000,1000,0,15,66.67
+"podman",100,1000,1000,0,16,62.50
+
+=== Resource snapshot ===
+Resource snapshot: 2026-10-12 12:45:02
+
+=== Docker ===
+CONTAINER ID   NAME                         CPU %     MEM USAGE / LIMIT     MEM %     NET I/O         BLOCK I/O     PIDS
+af7a1609b656   mtls-root-ms-docker          0.00%     53.46MiB / 7.748GiB   0.67%     132MB / 291MB   16.4kB / 0B   11
+f12d27434804   mtls-transaction-ms-docker   0.00%     34.89MiB / 7.748GiB   0.44%     289MB / 131MB   12.3kB / 0B   7
+
+=== Podman ===
+ID            NAME                        CPU %       MEM USAGE / LIMIT  MEM %       NET IO             BLOCK IO      PIDS        CPU TIME      AVG CPU %
+d6a56cb6ccbb  mtls-root-ms-podman         8.14%       55.62MB / 8.289GB  0.67%       153.9MB / 310.1MB  8.192kB / 0B  11          5m1.939774s   8.14%
+69bdec3f8304  mtls-transaction-ms-podman  2.16%       37.45MB / 8.289GB  0.45%       289.2MB / 131MB    4.096kB / 0B  7           1m19.989655s  2.16%
+
+Interpretation note:
+- PASS means the script verified its stated expected behavior.
+- FAIL means a check failed.
+- INCONCLUSIVE means the expected behavior could not be confirmed.
+- Resource snapshots alone do not establish which engine uses fewer resources.

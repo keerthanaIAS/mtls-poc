@@ -1,0 +1,24 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: transaction-ms-certificate
+  namespace: mtls-services
+spec:
+  secretName: transaction-ms-tls
+  duration: 1h
+  renewBefore: 20m
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+    rotationPolicy: Always
+  commonName: transaction-ms.mtls-services.svc.cluster.local
+  dnsNames:
+    - transaction-ms.mtls-services.svc.cluster.local
+  usages:
+    - digital signature
+    - server auth
+    - client auth
+  issuerRef:
+    name: vault-issuer
+    kind: Issuer
+    group: cert-manager.io

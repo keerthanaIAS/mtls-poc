@@ -31,7 +31,7 @@ spec:
       volumes:
         - name: certs
           secret:
-            secretName: transaction-ms-certs
+            secretName: transaction-ms-tls
 ---
 apiVersion: v1
 kind: Service

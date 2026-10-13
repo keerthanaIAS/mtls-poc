@@ -1,0 +1,7 @@
+engine,concurrency,requests,successes,failures,elapsed_seconds,requests_per_second
+"docker",10,1000,1000,0,12,83.33
+"podman",10,1000,1000,0,13,76.92
+"docker",50,1000,1000,0,14,71.43
+"podman",50,1000,1000,0,13,76.92
+"docker",100,1000,1000,0,15,66.67
+"podman",100,1000,1000,0,16,62.50
