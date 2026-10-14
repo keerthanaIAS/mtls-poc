@@ -1,5 +1,32 @@
 # Automated mTLS POC — Setup and Execution README
 
+keerthana@Mac-296 mtls-poc % which openssl
+openssl version
+/usr/bin/openssl
+LibreSSL 3.3.6
+keerthana@Mac-296 mtls-poc % 
+
+LibreSSL is a cryptography software library and command-line tool that macOS provides as part of its system tools. It is an alternative to OpenSSL, designed originally as a cleaner, more security-focused fork of OpenSSL.
+
+### LibreSSL vs OpenSSL
+
+| Feature                            | LibreSSL                                                     | OpenSSL                                                                  |
+| ---------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| What it is                         | Cryptography library and tools                               | Cryptography library and tools                                           |
+| Available on Mac by default        | Commonly available through `/usr/bin/openssl`                | Usually installed separately if you need the actual OpenSSL distribution |
+| Create private keys                | Yes                                                          | Yes                                                                      |
+| Create CA and service certificates | Yes                                                          | Yes                                                                      |
+| Inspect certificates               | Yes                                                          | Yes                                                                      |
+| Command compatibility              | Supports many OpenSSL commands, but not every option/version | Supports its own documented commands and features                        |
+
+### How it worked in our mTLS POC
+
+The flow is:
+------------
+LibreSSL / OpenSSL commands -> (Generate keys and certificates)
+CA + service certificates -> (Root MS and Transaction MS identities)
+TLS / mTLS connection -> (Services verify each other's certificates)
+
 ## 1. Objective
 
 Implement automated certificate management and mutual TLS (mTLS) communication between two backend services running inside Kubernetes.
