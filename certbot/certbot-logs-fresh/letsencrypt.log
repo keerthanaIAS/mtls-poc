@@ -1,0 +1,14 @@
+2026-10-15 16:20:53,626:DEBUG:certbot._internal.main:certbot version: 5.8.0
+2026-10-15 16:20:53,626:DEBUG:certbot._internal.main:Location of certbot entry point: /opt/homebrew/bin/certbot
+2026-10-15 16:20:53,626:DEBUG:certbot._internal.main:Arguments: ['--config-dir', '/Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh', '--work-dir', '/Users/keerthana/Desktop/mtls-poc/certbot/certbot-work-fresh', '--logs-dir', '/Users/keerthana/Desktop/mtls-poc/certbot/certbot-logs-fresh']
+2026-10-15 16:20:53,627:DEBUG:certbot._internal.main:Discovered plugins: PluginsRegistry(PluginEntryPoint#apache,PluginEntryPoint#dns-cloudflare,PluginEntryPoint#manual,PluginEntryPoint#nginx,PluginEntryPoint#null,PluginEntryPoint#standalone,PluginEntryPoint#webroot)
+2026-10-15 16:20:53,673:DEBUG:certbot._internal.log:Root logging level set at 30
+2026-10-15 16:20:53,709:INFO:certbot._internal.ocsp:Cannot extract OCSP URI from /Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh/live/transaction-ms/cert.pem
+2026-10-15 16:20:53,718:DEBUG:certbot._internal.display.obj:Notifying user: Found the following certs:
+  Certificate Name: transaction-ms
+    Serial Number: 6ae1cb2d6849f13e
+    Key Type: ECDSA
+    Identifiers: transaction-ms.test
+    Expiry Date: 2026-10-21 05:50:40+00:00 (VALID: 5 days)
+    Certificate Path: /Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh/live/transaction-ms/fullchain.pem
+    Private Key Path: /Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh/live/transaction-ms/privkey.pem

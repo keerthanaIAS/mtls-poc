@@ -1,0 +1,376 @@
+2026-10-15 11:20:40,527:DEBUG:certbot._internal.main:certbot version: 5.8.0
+2026-10-15 11:20:40,527:DEBUG:certbot._internal.main:Location of certbot entry point: /opt/homebrew/bin/certbot
+2026-10-15 11:20:40,527:DEBUG:certbot._internal.main:Arguments: ['--server', 'https://localhost:14000/dir', '--no-verify-ssl', '--manual', '--preferred-challenges', 'http', '--manual-auth-hook', '/Users/keerthana/Desktop/mtls-poc/certbot/hooks/auth.sh', '--manual-cleanup-hook', '/Users/keerthana/Desktop/mtls-poc/certbot/hooks/cleanup.sh', '--agree-tos', '--email', 'test@example.com', '--non-interactive', '--cert-name', 'transaction-ms', '-d', 'transaction-ms.test', '--config-dir', '/Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh', '--work-dir', '/Users/keerthana/Desktop/mtls-poc/certbot/certbot-work-fresh', '--logs-dir', '/Users/keerthana/Desktop/mtls-poc/certbot/certbot-logs-fresh']
+2026-10-15 11:20:40,528:DEBUG:certbot._internal.main:Discovered plugins: PluginsRegistry(PluginEntryPoint#apache,PluginEntryPoint#dns-cloudflare,PluginEntryPoint#manual,PluginEntryPoint#nginx,PluginEntryPoint#null,PluginEntryPoint#standalone,PluginEntryPoint#webroot)
+2026-10-15 11:20:40,568:DEBUG:certbot._internal.log:Root logging level set at 30
+2026-10-15 11:20:40,570:DEBUG:certbot._internal.plugins.selection:Requested authenticator manual and installer None
+2026-10-15 11:20:40,570:DEBUG:certbot._internal.plugins.selection:Single candidate plugin: * manual
+Description: Manual configuration or run your own shell scripts
+Interfaces: Authenticator, Plugin
+Entry point: EntryPoint(name='manual', value='certbot._internal.plugins.manual:Authenticator', group='certbot.plugins')
+Initialized: <certbot._internal.plugins.manual.Authenticator object at 0x10a01ecf0>
+Prep: True
+2026-10-15 11:20:40,570:DEBUG:certbot._internal.plugins.selection:Selected authenticator <certbot._internal.plugins.manual.Authenticator object at 0x10a01ecf0> and installer None
+2026-10-15 11:20:40,571:INFO:certbot._internal.plugins.selection:Plugins selected: Authenticator manual, Installer None
+2026-10-15 11:20:40,623:DEBUG:certbot._internal.main:Picked account: <Account(RegistrationResource(body=Registration(key=None, contact=(), agreement=None, status=None, terms_of_service_agreed=None, only_return_existing=None, external_account_binding=None), uri='https://localhost:14000/my-account/396000f945e9fa8e', new_authzr_uri=None, terms_of_service=None), f60fd91b22c4f85e600bcf6fcfce2187, Meta(creation_dt=datetime.datetime(2026, 10, 15, 5, 49, 22, tzinfo=datetime.timezone.utc), creation_host='Mac-432.lan', register_to_eff=None))>
+2026-10-15 11:20:40,641:DEBUG:acme.client:Sending GET request to https://localhost:14000/dir.
+2026-10-15 11:20:40,653:DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): localhost:14000
+2026-10-15 11:20:40,680:DEBUG:urllib3.connectionpool:https://localhost:14000 "GET /dir HTTP/1.1" 200 716
+2026-10-15 11:20:40,681:DEBUG:acme.client:Received response:
+HTTP 200
+Cache-Control: public, max-age=0, no-cache
+Content-Type: application/json; charset=utf-8
+Date: Thu, 15 Oct 2026 05:50:40 GMT
+Content-Length: 716
+
+{
+   "keyChange": "https://localhost:14000/rollover-account-key",
+   "meta": {
+      "caaIdentities": [
+         "pebble.letsencrypt.org"
+      ],
+      "externalAccountRequired": false,
+      "profiles": {
+         "default": "The profile you know and love",
+         "shortlived": "A short-lived cert profile, without actual enforcement"
+      },
+      "termsOfService": "data:text/plain,Do%20what%20thou%20wilt"
+   },
+   "newAccount": "https://localhost:14000/sign-me-up",
+   "newNonce": "https://localhost:14000/nonce-plz",
+   "newOrder": "https://localhost:14000/order-plz",
+   "renewalInfo": "https://localhost:14000/draft-ietf-acme-ari-03/renewalInfo",
+   "revokeCert": "https://localhost:14000/revoke-cert"
+}
+2026-10-15 11:20:40,681:DEBUG:certbot._internal.display.obj:Notifying user: Requesting a certificate for transaction-ms.test
+2026-10-15 11:20:40,686:DEBUG:acme.client:Requesting fresh nonce
+2026-10-15 11:20:40,687:DEBUG:acme.client:Sending HEAD request to https://localhost:14000/nonce-plz.
+2026-10-15 11:20:40,688:DEBUG:urllib3.connectionpool:https://localhost:14000 "HEAD /nonce-plz HTTP/1.1" 200 0
+2026-10-15 11:20:40,689:DEBUG:acme.client:Received response:
+HTTP 200
+Cache-Control: public, max-age=0, no-cache
+Link: <https://localhost:14000/dir>;rel="index"
+Replay-Nonce: JeF7ZFNxdpU_0GQzVwcsfw
+Date: Thu, 15 Oct 2026 05:50:40 GMT
+
+
+2026-10-15 11:20:40,689:DEBUG:acme.client:Storing nonce: JeF7ZFNxdpU_0GQzVwcsfw
+2026-10-15 11:20:40,689:DEBUG:acme.client:JWS payload:
+b'{\n  "identifiers": [\n    {\n      "type": "dns",\n      "value": "transaction-ms.test"\n    }\n  ]\n}'
+2026-10-15 11:20:40,690:DEBUG:acme.client:Sending POST request to https://localhost:14000/order-plz:
+{
+  "protected": "eyJhbGciOiAiUlMyNTYiLCAia2lkIjogImh0dHBzOi8vbG9jYWxob3N0OjE0MDAwL215LWFjY291bnQvMzk2MDAwZjk0NWU5ZmE4ZSIsICJub25jZSI6ICJKZUY3WkZOeGRwVV8wR1F6Vndjc2Z3IiwgInVybCI6ICJodHRwczovL2xvY2FsaG9zdDoxNDAwMC9vcmRlci1wbHoifQ",
+  "signature": "MLjs4NGzZAGRsS0bIL6RI8XlHx5FFPlpyYt4ZIj6E_285a_JIuU4dfcKtPEiVvs_7PUtVQKBls3JLOK2siIEttKgwlaTnWdzFNdDZtue1NfPlWgnPnlGh3PwJPUpuLsiUY69wcDzZ9oIm0nI2IAtSfYAag7NzToeuUijUqzJXGjK1ztnXTxyxK9pakm9vXB-tKWwsO7GAC_sABi-mS9To5HoZk7BhCR1V8-eYsWc71-PVdvqQ5XKA8Wmadw82UynjCM3nS23-lEBptguh_2CdXs-BNB1HMqWF0F0if2ury20lFbE3H5BRGObSQ9xR9xozl1OK73JsJAVZ70gWjWaBw",
+  "payload": "ewogICJpZGVudGlmaWVycyI6IFsKICAgIHsKICAgICAgInR5cGUiOiAiZG5zIiwKICAgICAgInZhbHVlIjogInRyYW5zYWN0aW9uLW1zLnRlc3QiCiAgICB9CiAgXQp9"
+}
+2026-10-15 11:20:40,693:DEBUG:urllib3.connectionpool:https://localhost:14000 "POST /order-plz HTTP/1.1" 201 410
+2026-10-15 11:20:40,693:DEBUG:acme.client:Received response:
+HTTP 201
+Cache-Control: public, max-age=0, no-cache
+Content-Type: application/json; charset=utf-8
+Link: <https://localhost:14000/dir>;rel="index"
+Location: https://localhost:14000/my-order/PE_M0w-NRnyVaJILN3J7ocLMHk7_0uhfULgMWLWnodc
+Replay-Nonce: 4OuFFyCc0vODJQRseCEpDw
+Date: Thu, 15 Oct 2026 05:50:40 GMT
+Content-Length: 410
+
+{
+   "status": "pending",
+   "expires": "2026-10-16T05:50:40Z",
+   "identifiers": [
+      {
+         "type": "dns",
+         "value": "transaction-ms.test"
+      }
+   ],
+   "profile": "shortlived",
+   "finalize": "https://localhost:14000/finalize-order/PE_M0w-NRnyVaJILN3J7ocLMHk7_0uhfULgMWLWnodc",
+   "authorizations": [
+      "https://localhost:14000/authZ/0FzJgROktrP-sGsHCIRuGrdH4-XiNAfqVXmTi5AmZyc"
+   ]
+}
+2026-10-15 11:20:40,693:DEBUG:acme.client:Storing nonce: 4OuFFyCc0vODJQRseCEpDw
+2026-10-15 11:20:40,693:DEBUG:acme.client:JWS payload:
+b''
+2026-10-15 11:20:40,694:DEBUG:acme.client:Sending POST request to https://localhost:14000/authZ/0FzJgROktrP-sGsHCIRuGrdH4-XiNAfqVXmTi5AmZyc:
+{
+  "protected": "eyJhbGciOiAiUlMyNTYiLCAia2lkIjogImh0dHBzOi8vbG9jYWxob3N0OjE0MDAwL215LWFjY291bnQvMzk2MDAwZjk0NWU5ZmE4ZSIsICJub25jZSI6ICI0T3VGRnlDYzB2T0RKUVJzZUNFcER3IiwgInVybCI6ICJodHRwczovL2xvY2FsaG9zdDoxNDAwMC9hdXRoWi8wRnpKZ1JPa3RyUC1zR3NIQ0lSdUdyZEg0LVhpTkFmcVZYbVRpNUFtWnljIn0",
+  "signature": "YMWmCLfgtwHeGQUMT7qCCmjFN59NXE7fqA22hVBtDtZLdVIpMiqJrFulnEQaDIncOwpj6eshHSMaE-lb2gjMw5APs2pAcDiH0Q27Ap0wJpQPZx4Dhor8l8bhofhZ5Jo4_nBeWmxZq_oAeH_SMQujLctSrDqeoYmA5BN5cxdeJdcAbMiM12p3rnYYQB_mCTGTF_A23lkmQlEb6cS0DVuE0lNa2cmayB7RsegqTiDOMrd_RMc4hFPh9LbDVOD3LIhllW62LdG-Pyafk9SGZv6ACevkgFw3JrN2siucUMJliYPd6iYERwb3wcuQuXoU_cW8yreSzTfIAWe2m8jRpvHN6w",
+  "payload": ""
+}
+2026-10-15 11:20:40,696:DEBUG:urllib3.connectionpool:https://localhost:14000 "POST /authZ/0FzJgROktrP-sGsHCIRuGrdH4-XiNAfqVXmTi5AmZyc HTTP/1.1" 200 1444
+2026-10-15 11:20:40,696:DEBUG:acme.client:Received response:
+HTTP 200
+Cache-Control: public, max-age=0, no-cache
+Content-Type: application/json; charset=utf-8
+Link: <https://localhost:14000/dir>;rel="index"
+Replay-Nonce: 1JwGPuvMUliVY-1ma0w6Yw
+Date: Thu, 15 Oct 2026 05:50:40 GMT
+Content-Length: 1444
+
+{
+   "status": "pending",
+   "identifier": {
+      "type": "dns",
+      "value": "transaction-ms.test"
+   },
+   "challenges": [
+      {
+         "type": "dns-account-01",
+         "url": "https://localhost:14000/chalZ/FuqLyi_V4f0iRhAmcTm8nkq-xV3cUBINMUowkpHuZxU",
+         "token": "iNmNssdR3wqf606dR69VA50sL_onvhuHbEsW462BU2k",
+         "status": "pending"
+      },
+      {
+         "type": "dns-persist-01",
+         "url": "https://localhost:14000/chalZ/NI1tsYc2i7R5ODLhWfDD8vbmZBFLT4JcHji_CERmM28",
+         "status": "pending",
+         "accounturi": "https://localhost:14000/my-account/396000f945e9fa8e",
+         "issuer-domain-names": [
+            "pebble.letsencrypt.org"
+         ]
+      },
+      {
+         "type": "tls-alpn-01",
+         "url": "https://localhost:14000/chalZ/XjLhRel-tju37gyfdV7SAqwMnDwXzS6QrNdB10DNw2Q",
+         "token": "MA2Mbs7NHmb2jifuvKJO5XrLhk6RfY0TL9kaIxvglGc",
+         "status": "pending"
+      },
+      {
+         "type": "http-01",
+         "url": "https://localhost:14000/chalZ/2m69HeUwwc4Wfg0VUVF7-bOmEPcBeJVL2wkeU9Wq7T0",
+         "token": "Iqv2tWcPXOIXw3gCFDOdQznMjAf94b-A8RMZny9VX8E",
+         "status": "pending"
+      },
+      {
+         "type": "dns-01",
+         "url": "https://localhost:14000/chalZ/2gq2pk74jYHv9kgEGC_wQATEt6oCVT0usuiR-JkBrFs",
+         "token": "_Hl3JsgQaoiCSdEYqm-B-J2pXVycXgawWWrTI3-l4e8",
+         "status": "pending"
+      }
+   ],
+   "expires": "2026-10-15T06:50:40Z"
+}
+2026-10-15 11:20:40,696:DEBUG:acme.client:Storing nonce: 1JwGPuvMUliVY-1ma0w6Yw
+2026-10-15 11:20:40,696:DEBUG:acme.challenges:dns-account-01 was not recognized, full message: {'type': 'dns-account-01', 'url': 'https://localhost:14000/chalZ/FuqLyi_V4f0iRhAmcTm8nkq-xV3cUBINMUowkpHuZxU', 'token': 'iNmNssdR3wqf606dR69VA50sL_onvhuHbEsW462BU2k', 'status': 'pending'}
+2026-10-15 11:20:40,696:DEBUG:acme.challenges:dns-persist-01 was not recognized, full message: {'type': 'dns-persist-01', 'url': 'https://localhost:14000/chalZ/NI1tsYc2i7R5ODLhWfDD8vbmZBFLT4JcHji_CERmM28', 'status': 'pending', 'accounturi': 'https://localhost:14000/my-account/396000f945e9fa8e', 'issuer-domain-names': ['pebble.letsencrypt.org']}
+2026-10-15 11:20:40,696:DEBUG:acme.challenges:tls-alpn-01 was not recognized, full message: {'type': 'tls-alpn-01', 'url': 'https://localhost:14000/chalZ/XjLhRel-tju37gyfdV7SAqwMnDwXzS6QrNdB10DNw2Q', 'token': 'MA2Mbs7NHmb2jifuvKJO5XrLhk6RfY0TL9kaIxvglGc', 'status': 'pending'}
+2026-10-15 11:20:40,697:INFO:certbot._internal.auth_handler:Performing the following challenges:
+2026-10-15 11:20:40,697:INFO:certbot._internal.auth_handler:http-01 challenge for Identifier(typ=IdentifierType(dns), value='transaction-ms.test')
+2026-10-15 11:20:40,697:INFO:certbot.compat.misc:Running manual-auth-hook command: /Users/keerthana/Desktop/mtls-poc/certbot/hooks/auth.sh
+2026-10-15 11:20:40,755:DEBUG:certbot._internal.display.obj:Notifying user: Hook '--manual-auth-hook' for transaction-ms.test ran with output:
+ HTTP-01 challenge registered
+2026-10-15 11:20:40,756:DEBUG:acme.client:JWS payload:
+b'{}'
+2026-10-15 11:20:40,757:DEBUG:acme.client:Sending POST request to https://localhost:14000/chalZ/2m69HeUwwc4Wfg0VUVF7-bOmEPcBeJVL2wkeU9Wq7T0:
+{
+  "protected": "eyJhbGciOiAiUlMyNTYiLCAia2lkIjogImh0dHBzOi8vbG9jYWxob3N0OjE0MDAwL215LWFjY291bnQvMzk2MDAwZjk0NWU5ZmE4ZSIsICJub25jZSI6ICIxSndHUHV2TVVsaVZZLTFtYTB3Nll3IiwgInVybCI6ICJodHRwczovL2xvY2FsaG9zdDoxNDAwMC9jaGFsWi8ybTY5SGVVd3djNFdmZzBWVVZGNy1iT21FUGNCZUpWTDJ3a2VVOVdxN1QwIn0",
+  "signature": "Vpo1LozCQIKjqziMugQTo10PbM1cN6yFUz2018AQEYX9lvYs199gmwlYobUfiLeNsaRX3DFQTQo1Dh36CPTcYg9r2oB1H8jfxYbhJkrnMhlxLuF-EdeXMAY9IygdFPnSY7bnqbwSUn0l0mnN28GbcF4tofYVWnCj4tPKmV-kfPI5lP_r6NHob6EStJFSlziWJK4CI82kvPi3KQNmg7t-uRCwHwV0Gi7NXbSfcgJsCM4hcCweyo95w7Yazy0ADu9ONQazNAk4hRF74wAy3T6z23DxdI8g7v12xNsq5tyrWP5lsyqwOazDKW01d2kzLmPDRkups2HIh7xruJ_0Svy9Gg",
+  "payload": "e30"
+}
+2026-10-15 11:20:40,760:DEBUG:urllib3.connectionpool:https://localhost:14000 "POST /chalZ/2m69HeUwwc4Wfg0VUVF7-bOmEPcBeJVL2wkeU9Wq7T0 HTTP/1.1" 200 197
+2026-10-15 11:20:40,760:DEBUG:acme.client:Received response:
+HTTP 200
+Cache-Control: public, max-age=0, no-cache
+Content-Type: application/json; charset=utf-8
+Link: <https://localhost:14000/dir>;rel="index", <https://localhost:14000/authZ/0FzJgROktrP-sGsHCIRuGrdH4-XiNAfqVXmTi5AmZyc>;rel="up"
+Replay-Nonce: wShTHdC8fr4MG8NksqAueA
+Date: Thu, 15 Oct 2026 05:50:40 GMT
+Content-Length: 197
+
+{
+   "type": "http-01",
+   "url": "https://localhost:14000/chalZ/2m69HeUwwc4Wfg0VUVF7-bOmEPcBeJVL2wkeU9Wq7T0",
+   "token": "Iqv2tWcPXOIXw3gCFDOdQznMjAf94b-A8RMZny9VX8E",
+   "status": "processing"
+}
+2026-10-15 11:20:40,760:DEBUG:acme.client:Storing nonce: wShTHdC8fr4MG8NksqAueA
+2026-10-15 11:20:40,760:INFO:certbot._internal.auth_handler:Waiting for verification...
+2026-10-15 11:20:41,765:DEBUG:acme.client:JWS payload:
+b''
+2026-10-15 11:20:41,769:DEBUG:acme.client:Sending POST request to https://localhost:14000/authZ/0FzJgROktrP-sGsHCIRuGrdH4-XiNAfqVXmTi5AmZyc:
+{
+  "protected": "eyJhbGciOiAiUlMyNTYiLCAia2lkIjogImh0dHBzOi8vbG9jYWxob3N0OjE0MDAwL215LWFjY291bnQvMzk2MDAwZjk0NWU5ZmE4ZSIsICJub25jZSI6ICJ3U2hUSGRDOGZyNE1HOE5rc3FBdWVBIiwgInVybCI6ICJodHRwczovL2xvY2FsaG9zdDoxNDAwMC9hdXRoWi8wRnpKZ1JPa3RyUC1zR3NIQ0lSdUdyZEg0LVhpTkFmcVZYbVRpNUFtWnljIn0",
+  "signature": "sF3zukADg7LSdo5H_zgzLUD3c75ULpV4MM70idaSI_XHEveYxHAacPTZx9O9UC9vMTlldeeKdxlD80jktXL1sby6RyoGNy5XkBHjzKAJs4gHVSFh_L0ZLv6MgpaLH6rwDF3W5k8DWV0_08OIcMko0tuB-RVaUaXZ8FrZ0gxdUhRK2pePszy8RG3z3pUbw6NPoqre-kUmF79FzquMlzcGmcia_Vijl-Tnqh4JCnxbPs0jo6PT2CyyDvwvx3Zbw50TUuRMmyWjfnRei6Pml2Y95to-knjvaZSCmhAkmsK37JyMdUcmPlJRtmcTc9x_VFwg_T5Oi_56GnJgl54l7fTlFg",
+  "payload": ""
+}
+2026-10-15 11:20:41,773:DEBUG:urllib3.connectionpool:https://localhost:14000 "POST /authZ/0FzJgROktrP-sGsHCIRuGrdH4-XiNAfqVXmTi5AmZyc HTTP/1.1" 200 445
+2026-10-15 11:20:41,774:DEBUG:acme.client:Received response:
+HTTP 200
+Cache-Control: public, max-age=0, no-cache
+Content-Type: application/json; charset=utf-8
+Link: <https://localhost:14000/dir>;rel="index"
+Replay-Nonce: WNyoDByvp2OaTtjAJbzP7g
+Date: Thu, 15 Oct 2026 05:50:41 GMT
+Content-Length: 445
+
+{
+   "status": "valid",
+   "identifier": {
+      "type": "dns",
+      "value": "transaction-ms.test"
+   },
+   "challenges": [
+      {
+         "type": "http-01",
+         "url": "https://localhost:14000/chalZ/2m69HeUwwc4Wfg0VUVF7-bOmEPcBeJVL2wkeU9Wq7T0",
+         "token": "Iqv2tWcPXOIXw3gCFDOdQznMjAf94b-A8RMZny9VX8E",
+         "status": "valid",
+         "validated": "2026-10-15T05:50:40Z"
+      }
+   ],
+   "expires": "2026-10-15T06:50:40Z"
+}
+2026-10-15 11:20:41,774:DEBUG:acme.client:Storing nonce: WNyoDByvp2OaTtjAJbzP7g
+2026-10-15 11:20:41,774:DEBUG:certbot._internal.error_handler:Calling registered functions
+2026-10-15 11:20:41,774:INFO:certbot._internal.auth_handler:Cleaning up challenges
+2026-10-15 11:20:41,775:INFO:certbot.compat.misc:Running manual-cleanup-hook command: /Users/keerthana/Desktop/mtls-poc/certbot/hooks/cleanup.sh
+2026-10-15 11:20:41,856:DEBUG:certbot._internal.display.obj:Notifying user: Hook '--manual-cleanup-hook' for transaction-ms.test ran with output:
+ HTTP-01 challenge cleaned up
+2026-10-15 11:20:41,857:DEBUG:certbot._internal.client:CSR: CSR(file=None, data=b'-----BEGIN CERTIFICATE REQUEST-----\nMIHtMIGTAgEAMAAwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAAQAzbrc8u0ptvnI\nWvLIrvmW13aJsRAmWDp9HFw2c3tixxac2dWYsa5r+Is8vadhL4Cn9TNAlUVktOFq\nAFLpOdDgoDEwLwYJKoZIhvcNAQkOMSIwIDAeBgNVHREEFzAVghN0cmFuc2FjdGlv\nbi1tcy50ZXN0MAoGCCqGSM49BAMCA0kAMEYCIQD9+NSYWrYAadFHJg9dllTs0Npa\nW+hYYg4jZhtrGgJ+dQIhAN9J5Q6WSx31L3bcETQNfxAgqUT7UTEnMzuDwsYNN7Q1\n-----END CERTIFICATE REQUEST-----\n', form='pem')
+2026-10-15 11:20:41,858:DEBUG:certbot._internal.client:Will poll for certificate issuance until 2026-10-15 11:22:11.858007
+2026-10-15 11:20:41,858:DEBUG:acme.client:JWS payload:
+b'{\n  "csr": "MIHtMIGTAgEAMAAwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAAQAzbrc8u0ptvnIWvLIrvmW13aJsRAmWDp9HFw2c3tixxac2dWYsa5r-Is8vadhL4Cn9TNAlUVktOFqAFLpOdDgoDEwLwYJKoZIhvcNAQkOMSIwIDAeBgNVHREEFzAVghN0cmFuc2FjdGlvbi1tcy50ZXN0MAoGCCqGSM49BAMCA0kAMEYCIQD9-NSYWrYAadFHJg9dllTs0NpaW-hYYg4jZhtrGgJ-dQIhAN9J5Q6WSx31L3bcETQNfxAgqUT7UTEnMzuDwsYNN7Q1"\n}'
+2026-10-15 11:20:41,859:DEBUG:acme.client:Sending POST request to https://localhost:14000/finalize-order/PE_M0w-NRnyVaJILN3J7ocLMHk7_0uhfULgMWLWnodc:
+{
+  "protected": "eyJhbGciOiAiUlMyNTYiLCAia2lkIjogImh0dHBzOi8vbG9jYWxob3N0OjE0MDAwL215LWFjY291bnQvMzk2MDAwZjk0NWU5ZmE4ZSIsICJub25jZSI6ICJXTnlvREJ5dnAyT2FUdGpBSmJ6UDdnIiwgInVybCI6ICJodHRwczovL2xvY2FsaG9zdDoxNDAwMC9maW5hbGl6ZS1vcmRlci9QRV9NMHctTlJueVZhSklMTjNKN29jTE1IazdfMHVoZlVMZ01XTFdub2RjIn0",
+  "signature": "euoyrNBemibaZxYwyaInCbGbfYWrdWuJwA0YtSF_dtG-MIJbwJjFFaBRLsgtv9EjslrPgjgW4A6KWtHjYsrn9T3N6aZ1eMtutESQulz3OpiBpG8NJMx_-WqeIZ_EUbJ0gRJvixQcBctxd0ICiNExziG5gcbfgVHgwZayOFzuYyP5VYvZ_gs_y0lD7JoH2L3suq81gnmqH8-QRuOVNhHBFM1qm2Tr0dqbYOokkMt1oNKnjQYmDAdkRt-85TCU0PmB7fNGp5wZqtErQM_f3tNsQGcS6tnbq9KG1yWY9ilPRIG9Q5SUdv2TOCumd51vVQ2_Y7K2sGSmQcDkyiY_7NeQZQ",
+  "payload": "ewogICJjc3IiOiAiTUlIdE1JR1RBZ0VBTUFBd1dUQVRCZ2NxaGtqT1BRSUJCZ2dxaGtqT1BRTUJCd05DQUFRQXpicmM4dTBwdHZuSVd2TElydm1XMTNhSnNSQW1XRHA5SEZ3MmMzdGl4eGFjMmRXWXNhNXItSXM4dmFkaEw0Q245VE5BbFVWa3RPRnFBRkxwT2REZ29ERXdMd1lKS29aSWh2Y05BUWtPTVNJd0lEQWVCZ05WSFJFRUZ6QVZnaE4wY21GdWMyRmpkR2x2YmkxdGN5NTBaWE4wTUFvR0NDcUdTTTQ5QkFNQ0Ewa0FNRVlDSVFEOS1OU1lXcllBYWRGSEpnOWRsbFRzME5wYVctaFlZZzRqWmh0ckdnSi1kUUloQU45SjVRNldTeDMxTDNiY0VUUU5meEFncVVUN1VURW5NenVEd3NZTk43UTEiCn0"
+}
+2026-10-15 11:20:41,864:DEBUG:urllib3.connectionpool:https://localhost:14000 "POST /finalize-order/PE_M0w-NRnyVaJILN3J7ocLMHk7_0uhfULgMWLWnodc HTTP/1.1" 200 413
+2026-10-15 11:20:41,864:DEBUG:acme.client:Received response:
+HTTP 200
+Cache-Control: public, max-age=0, no-cache
+Content-Type: application/json; charset=utf-8
+Link: <https://localhost:14000/dir>;rel="index"
+Replay-Nonce: k9YpwZ18nSJsv7KXYBPPTA
+Retry-After: 5
+Date: Thu, 15 Oct 2026 05:50:41 GMT
+Content-Length: 413
+
+{
+   "status": "processing",
+   "expires": "2026-10-16T05:50:40Z",
+   "identifiers": [
+      {
+         "type": "dns",
+         "value": "transaction-ms.test"
+      }
+   ],
+   "profile": "shortlived",
+   "finalize": "https://localhost:14000/finalize-order/PE_M0w-NRnyVaJILN3J7ocLMHk7_0uhfULgMWLWnodc",
+   "authorizations": [
+      "https://localhost:14000/authZ/0FzJgROktrP-sGsHCIRuGrdH4-XiNAfqVXmTi5AmZyc"
+   ]
+}
+2026-10-15 11:20:41,864:DEBUG:acme.client:Storing nonce: k9YpwZ18nSJsv7KXYBPPTA
+2026-10-15 11:20:42,866:DEBUG:acme.client:JWS payload:
+b''
+2026-10-15 11:20:42,869:DEBUG:acme.client:Sending POST request to https://localhost:14000/my-order/PE_M0w-NRnyVaJILN3J7ocLMHk7_0uhfULgMWLWnodc:
+{
+  "protected": "eyJhbGciOiAiUlMyNTYiLCAia2lkIjogImh0dHBzOi8vbG9jYWxob3N0OjE0MDAwL215LWFjY291bnQvMzk2MDAwZjk0NWU5ZmE4ZSIsICJub25jZSI6ICJrOVlwd1oxOG5TSnN2N0tYWUJQUFRBIiwgInVybCI6ICJodHRwczovL2xvY2FsaG9zdDoxNDAwMC9teS1vcmRlci9QRV9NMHctTlJueVZhSklMTjNKN29jTE1IazdfMHVoZlVMZ01XTFdub2RjIn0",
+  "signature": "evEuHZtv6ajRJkxD0q6qU9W64nQvYrBiAz00ZrtGwPXDrSkIEcT2PlWDUDaGWubmft8lqAAPvgqTf-2spQzZz-nDf9iwI5rFP5wQIJI7UGSix6tPpjuKhKFVjV_yOtSWpRj-xAG9Q9qslg0ngxyVgF80POaFPEyhMca_tH4pImt3jQ3dJUIgdEM_vo5vP1RTcilVIt30Xq7hQKvKxlKPhUxiHFRudsraszjBT5d0YaMsgcL3Ydb333-Y-KT2m9YBN8P-8WnVxaDaR5HuaYbn-1C0wKadbF-M5q1CBaMJ2XCC7F3VD1Pfo3G4ArrxgpVEpdvDfy9wR-2y7O4i0XRjqg",
+  "payload": ""
+}
+2026-10-15 11:20:42,873:DEBUG:urllib3.connectionpool:https://localhost:14000 "POST /my-order/PE_M0w-NRnyVaJILN3J7ocLMHk7_0uhfULgMWLWnodc HTTP/1.1" 200 476
+2026-10-15 11:20:42,873:DEBUG:acme.client:Received response:
+HTTP 200
+Cache-Control: public, max-age=0, no-cache
+Content-Type: application/json; charset=utf-8
+Link: <https://localhost:14000/dir>;rel="index"
+Replay-Nonce: MJWV8mB4jM_bciiEFscnaQ
+Date: Thu, 15 Oct 2026 05:50:42 GMT
+Content-Length: 476
+
+{
+   "status": "valid",
+   "expires": "2026-10-16T05:50:40Z",
+   "identifiers": [
+      {
+         "type": "dns",
+         "value": "transaction-ms.test"
+      }
+   ],
+   "profile": "shortlived",
+   "finalize": "https://localhost:14000/finalize-order/PE_M0w-NRnyVaJILN3J7ocLMHk7_0uhfULgMWLWnodc",
+   "authorizations": [
+      "https://localhost:14000/authZ/0FzJgROktrP-sGsHCIRuGrdH4-XiNAfqVXmTi5AmZyc"
+   ],
+   "certificate": "https://localhost:14000/certZ/6ae1cb2d6849f13e"
+}
+2026-10-15 11:20:42,873:DEBUG:acme.client:Storing nonce: MJWV8mB4jM_bciiEFscnaQ
+2026-10-15 11:20:42,873:DEBUG:acme.client:JWS payload:
+b''
+2026-10-15 11:20:42,875:DEBUG:acme.client:Sending POST request to https://localhost:14000/certZ/6ae1cb2d6849f13e:
+{
+  "protected": "eyJhbGciOiAiUlMyNTYiLCAia2lkIjogImh0dHBzOi8vbG9jYWxob3N0OjE0MDAwL215LWFjY291bnQvMzk2MDAwZjk0NWU5ZmE4ZSIsICJub25jZSI6ICJNSldWOG1CNGpNX2JjaWlFRnNjbmFRIiwgInVybCI6ICJodHRwczovL2xvY2FsaG9zdDoxNDAwMC9jZXJ0Wi82YWUxY2IyZDY4NDlmMTNlIn0",
+  "signature": "FRfmwvluLSKba2Px5rb00F0QOezKWxLzynmUdiUmYHpbmfZ9JQoUHOQXeX7tkz2kLKcUTidp-C1zWJ6vSUN7AjeKPirOF7cRPO0I0HVswXlTwEfDH6ILAqiYTQh59smAWbqxGdfwZTZvWrpcnems6e4QNf-HLpGvqfoNZso9AYzDpgsDQwFT2ywHuVqq4s-oCtQ83WC477uYPpqieTg3bOQbvFugN2Z6MVAd61YI36pBz6sPvHqZ6_-1yF0E_45auPBQsT_RnVE3GxrVaEJsQDlhbKpzh-5jXt09Eq3SRqnOvk6QXIVZhxE9XfSQ8pnBEOnx1smlcmkx1Q-MBpxuUg",
+  "payload": ""
+}
+2026-10-15 11:20:42,877:DEBUG:urllib3.connectionpool:https://localhost:14000 "POST /certZ/6ae1cb2d6849f13e HTTP/1.1" 200 1271
+2026-10-15 11:20:42,878:DEBUG:acme.client:Received response:
+HTTP 200
+Cache-Control: public, max-age=0, no-cache
+Content-Type: application/pem-certificate-chain; charset=utf-8
+Link: <https://localhost:14000/dir>;rel="index"
+Replay-Nonce: k3CLU87TG6FHHKGK8yh0bA
+Date: Thu, 15 Oct 2026 05:50:42 GMT
+Content-Length: 1271
+
+-----BEGIN CERTIFICATE-----
+MIIBlzCCAT2gAwIBAgIIauHLLWhJ8T4wCgYIKoZIzj0EAwIwKDEmMCQGA1UEAxMd
+UGViYmxlIEludGVybWVkaWF0ZSBDQSAyYmFkZTgwHhcNMjYxMDE1MDU1MDQxWhcN
+MjYxMDIxMDU1MDQwWjAAMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEAM263PLt
+Kbb5yFryyK75ltd2ibEQJlg6fRxcNnN7YscWnNnVmLGua/iLPL2nYS+Ap/UzQJVF
+ZLThagBS6TnQ4KN5MHcwDgYDVR0PAQH/BAQDAgeAMBMGA1UdJQQMMAoGCCsGAQUF
+BwMBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAU3/cY6Tl4rADax6dwY+eFYPUs
+4XIwIQYDVR0RAQH/BBcwFYITdHJhbnNhY3Rpb24tbXMudGVzdDAKBggqhkjOPQQD
+AgNIADBFAiAVUfTyS4/x4JB3BDH43I2i47yUmwhYSVPzw4jsehpLkAIhAOtCY+7R
+JbDsH0lma5m3UABJZiKH+ZF8W726ivrrVVz+
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+MIIBuTCCAV6gAwIBAgIINSR3Z57OrnwwCgYIKoZIzj0EAwIwIDEeMBwGA1UEAxMV
+UGViYmxlIFJvb3QgQ0EgNjIzOGNmMCAXDTI2MTAxNTA1NDUyN1oYDzIwNTYxMDE1
+MDU0NTI3WjAoMSYwJAYDVQQDEx1QZWJibGUgSW50ZXJtZWRpYXRlIENBIDJiYWRl
+ODBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABMTUC9AE6+sH7aAz78ztEjszYSNt
+B0n/jmUbIEmYjyjrPlq8q/niklBEHnte1tf5zqd4DrcJhNwW8sLO+UAsk4WjeDB2
+MA4GA1UdDwEB/wQEAwIChDATBgNVHSUEDDAKBggrBgEFBQcDATAPBgNVHRMBAf8E
+BTADAQH/MB0GA1UdDgQWBBTf9xjpOXisANrHp3Bj54Vg9SzhcjAfBgNVHSMEGDAW
+gBQ33BUgInZO1B4oyLJhWUAxSOgqlTAKBggqhkjOPQQDAgNJADBGAiEAxC5ftiQH
+MXLbJD/r5oo8ZoxwqezCR4FUoynQKJ9ykUECIQD0K/YSCNU9Ko0eEzchzu5o30TV
+RdZ7yCXfeM7JVFqMqA==
+-----END CERTIFICATE-----
+
+2026-10-15 11:20:42,878:DEBUG:acme.client:Storing nonce: k3CLU87TG6FHHKGK8yh0bA
+2026-10-15 11:20:42,878:INFO:certbot._internal.client:Non-standard path(s), might not work with crontab installed by your operating system package manager
+2026-10-15 11:20:42,880:DEBUG:certbot._internal.storage:Creating directory /Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh/archive.
+2026-10-15 11:20:42,881:DEBUG:certbot._internal.storage:Creating directory /Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh/live.
+2026-10-15 11:20:42,882:DEBUG:certbot._internal.storage:Writing README to /Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh/live/README.
+2026-10-15 11:20:42,883:DEBUG:certbot._internal.storage:Creating directory /Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh/archive/transaction-ms.
+2026-10-15 11:20:42,884:DEBUG:certbot._internal.storage:Creating directory /Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh/live/transaction-ms.
+2026-10-15 11:20:42,887:DEBUG:certbot._internal.storage:Writing certificate to /Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh/live/transaction-ms/cert.pem.
+2026-10-15 11:20:42,888:DEBUG:certbot._internal.storage:Writing private key to /Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh/live/transaction-ms/privkey.pem.
+2026-10-15 11:20:42,889:DEBUG:certbot._internal.storage:Writing chain to /Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh/live/transaction-ms/chain.pem.
+2026-10-15 11:20:42,890:DEBUG:certbot._internal.storage:Writing full chain to /Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh/live/transaction-ms/fullchain.pem.
+2026-10-15 11:20:42,891:DEBUG:certbot._internal.storage:Writing README to /Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh/live/transaction-ms/README.
+2026-10-15 11:20:42,919:DEBUG:certbot.configuration:Var account=f60fd91b22c4f85e600bcf6fcfce2187 (set by user).
+2026-10-15 11:20:42,919:DEBUG:certbot.configuration:Var pref_challs=['http-01'] (set by user).
+2026-10-15 11:20:42,919:DEBUG:certbot.configuration:Var config_dir=/Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh (set by user).
+2026-10-15 11:20:42,919:DEBUG:certbot.configuration:Var work_dir=/Users/keerthana/Desktop/mtls-poc/certbot/certbot-work-fresh (set by user).
+2026-10-15 11:20:42,919:DEBUG:certbot.configuration:Var logs_dir=/Users/keerthana/Desktop/mtls-poc/certbot/certbot-logs-fresh (set by user).
+2026-10-15 11:20:42,919:DEBUG:certbot.configuration:Var server=https://localhost:14000/dir (set by user).
+2026-10-15 11:20:42,920:DEBUG:certbot._internal.plugins.selection:Requested authenticator manual and installer None
+2026-10-15 11:20:42,920:DEBUG:certbot._internal.plugins.selection:Requested authenticator manual and installer None
+2026-10-15 11:20:42,920:DEBUG:certbot.configuration:Var manual_auth_hook=/Users/keerthana/Desktop/mtls-poc/certbot/hooks/auth.sh (set by user).
+2026-10-15 11:20:42,920:DEBUG:certbot.configuration:Var manual_cleanup_hook=/Users/keerthana/Desktop/mtls-poc/certbot/hooks/cleanup.sh (set by user).
+2026-10-15 11:20:42,932:DEBUG:certbot._internal.display.obj:Notifying user: 
+Successfully received certificate.
+Certificate is saved at: /Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh/live/transaction-ms/fullchain.pem
+Key is saved at:         /Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh/live/transaction-ms/privkey.pem
+This certificate expires on 2026-10-21.
+These files will be updated when the certificate renews.
+2026-10-15 11:20:42,933:DEBUG:certbot._internal.display.obj:Notifying user: NEXT STEPS:
+2026-10-15 11:20:42,933:DEBUG:certbot._internal.display.obj:Notifying user: - The certificate will need to be renewed before it expires. Certbot can automatically renew the certificate in the background, but you may need to take steps to enable that functionality. See https://certbot.org/renewal-setup for instructions.
+2026-10-15 11:20:42,936:DEBUG:certbot._internal.display.obj:Notifying user: If you like Certbot, please consider supporting our work by:
+ * Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+ * Donating to EFF:                    https://eff.org/donate-le

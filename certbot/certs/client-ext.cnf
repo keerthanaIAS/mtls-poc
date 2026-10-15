@@ -1,0 +1,4 @@
+basicConstraints=critical,CA:FALSE
+keyUsage=critical,digitalSignature,keyEncipherment
+extendedKeyUsage=clientAuth
+subjectAltName=DNS:root-ms

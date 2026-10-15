@@ -1,0 +1,117 @@
+2026-10-15 11:17:49,237:DEBUG:certbot._internal.main:certbot version: 5.8.0
+2026-10-15 11:17:49,238:DEBUG:certbot._internal.main:Location of certbot entry point: /opt/homebrew/bin/certbot
+2026-10-15 11:17:49,238:DEBUG:certbot._internal.main:Arguments: ['--server', 'https://localhost:14000/dir', '--no-verify-ssl', '--manual', '--preferred-challenges', 'http', '--manual-auth-hook', '/Users/keerthana/Desktop/mtls-poc/certbot/hooks/auth.sh', '--manual-cleanup-hook', '/Users/keerthana/Desktop/mtls-poc/certbot/hooks/cleanup.sh', '--agree-tos', '--email', 'test@example.com', '--non-interactive', '--cert-name', 'transaction-ms', '-d', 'transaction-ms.test', '--config-dir', '/Users/keerthana/Desktop/mtls-poc/certbot/certbot-config', '--work-dir', '/Users/keerthana/Desktop/mtls-poc/certbot/certbot-work', '--logs-dir', '/Users/keerthana/Desktop/mtls-poc/certbot/certbot-logs']
+2026-10-15 11:17:49,238:DEBUG:certbot._internal.main:Discovered plugins: PluginsRegistry(PluginEntryPoint#apache,PluginEntryPoint#dns-cloudflare,PluginEntryPoint#manual,PluginEntryPoint#nginx,PluginEntryPoint#null,PluginEntryPoint#standalone,PluginEntryPoint#webroot)
+2026-10-15 11:17:49,276:DEBUG:certbot._internal.log:Root logging level set at 30
+2026-10-15 11:17:49,278:DEBUG:certbot._internal.plugins.selection:Requested authenticator manual and installer None
+2026-10-15 11:17:49,278:DEBUG:certbot._internal.plugins.selection:Single candidate plugin: * manual
+Description: Manual configuration or run your own shell scripts
+Interfaces: Authenticator, Plugin
+Entry point: EntryPoint(name='manual', value='certbot._internal.plugins.manual:Authenticator', group='certbot.plugins')
+Initialized: <certbot._internal.plugins.manual.Authenticator object at 0x107ececf0>
+Prep: True
+2026-10-15 11:17:49,279:DEBUG:certbot._internal.plugins.selection:Selected authenticator <certbot._internal.plugins.manual.Authenticator object at 0x107ececf0> and installer None
+2026-10-15 11:17:49,279:INFO:certbot._internal.plugins.selection:Plugins selected: Authenticator manual, Installer None
+2026-10-15 11:17:49,333:DEBUG:certbot._internal.main:Picked account: <Account(RegistrationResource(body=Registration(key=None, contact=(), agreement=None, status=None, terms_of_service_agreed=None, only_return_existing=None, external_account_binding=None), uri='https://localhost:14000/my-account/5c39e1200e2b6159', new_authzr_uri=None, terms_of_service=None), 7caa8bd794c399560b471fdf53807c53, Meta(creation_dt=datetime.datetime(2026, 10, 15, 5, 43, 39, tzinfo=datetime.timezone.utc), creation_host='Mac-432.lan', register_to_eff=None))>
+2026-10-15 11:17:49,352:DEBUG:acme.client:Sending GET request to https://localhost:14000/dir.
+2026-10-15 11:17:49,364:DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): localhost:14000
+2026-10-15 11:17:49,388:DEBUG:urllib3.connectionpool:https://localhost:14000 "GET /dir HTTP/1.1" 200 716
+2026-10-15 11:17:49,389:DEBUG:acme.client:Received response:
+HTTP 200
+Cache-Control: public, max-age=0, no-cache
+Content-Type: application/json; charset=utf-8
+Date: Thu, 15 Oct 2026 05:47:49 GMT
+Content-Length: 716
+
+{
+   "keyChange": "https://localhost:14000/rollover-account-key",
+   "meta": {
+      "caaIdentities": [
+         "pebble.letsencrypt.org"
+      ],
+      "externalAccountRequired": false,
+      "profiles": {
+         "default": "The profile you know and love",
+         "shortlived": "A short-lived cert profile, without actual enforcement"
+      },
+      "termsOfService": "data:text/plain,Do%20what%20thou%20wilt"
+   },
+   "newAccount": "https://localhost:14000/sign-me-up",
+   "newNonce": "https://localhost:14000/nonce-plz",
+   "newOrder": "https://localhost:14000/order-plz",
+   "renewalInfo": "https://localhost:14000/draft-ietf-acme-ari-03/renewalInfo",
+   "revokeCert": "https://localhost:14000/revoke-cert"
+}
+2026-10-15 11:17:49,390:DEBUG:certbot._internal.display.obj:Notifying user: Requesting a certificate for transaction-ms.test
+2026-10-15 11:17:49,395:DEBUG:acme.client:Requesting fresh nonce
+2026-10-15 11:17:49,395:DEBUG:acme.client:Sending HEAD request to https://localhost:14000/nonce-plz.
+2026-10-15 11:17:49,397:DEBUG:urllib3.connectionpool:https://localhost:14000 "HEAD /nonce-plz HTTP/1.1" 200 0
+2026-10-15 11:17:49,397:DEBUG:acme.client:Received response:
+HTTP 200
+Cache-Control: public, max-age=0, no-cache
+Link: <https://localhost:14000/dir>;rel="index"
+Replay-Nonce: z928TJPDfb_gN4YtwhuaVA
+Date: Thu, 15 Oct 2026 05:47:49 GMT
+
+
+2026-10-15 11:17:49,397:DEBUG:acme.client:Storing nonce: z928TJPDfb_gN4YtwhuaVA
+2026-10-15 11:17:49,397:DEBUG:acme.client:JWS payload:
+b'{\n  "identifiers": [\n    {\n      "type": "dns",\n      "value": "transaction-ms.test"\n    }\n  ]\n}'
+2026-10-15 11:17:49,399:DEBUG:acme.client:Sending POST request to https://localhost:14000/order-plz:
+{
+  "protected": "eyJhbGciOiAiUlMyNTYiLCAia2lkIjogImh0dHBzOi8vbG9jYWxob3N0OjE0MDAwL215LWFjY291bnQvNWMzOWUxMjAwZTJiNjE1OSIsICJub25jZSI6ICJ6OTI4VEpQRGZiX2dONFl0d2h1YVZBIiwgInVybCI6ICJodHRwczovL2xvY2FsaG9zdDoxNDAwMC9vcmRlci1wbHoifQ",
+  "signature": "PuNR8amZ02Od2iWb4AVFjXUQ3re7I8RZ0G2N0vOricMTAp2-jfjBNxuGivGPYjA3Yu0QWXeusMydADXqrWSWdItAEfAS50zcgwdXgEgzfjSw9gZM-tTdRKaCl-PmuUmwUQTIwhBjBzqLRQY_9d062Q_NnO-BQg-DTwO445ouYsHbQKpyrRZxrUntJ_i9zTwMaYrp1nxZu28xBsGm-yg7S2DPAq6rlcrcP_xER_bcK2usnx6BmA66jN6WL3k_LrRKm8yiEO9amxKV5uX4Wfzzqden9YHSbH7Tk9yMhNHxxTFY4cvhbHoERepsRwdfeTPS7Jacize5nXGEiUdYqW9j8A",
+  "payload": "ewogICJpZGVudGlmaWVycyI6IFsKICAgIHsKICAgICAgInR5cGUiOiAiZG5zIiwKICAgICAgInZhbHVlIjogInRyYW5zYWN0aW9uLW1zLnRlc3QiCiAgICB9CiAgXQp9"
+}
+2026-10-15 11:17:49,400:DEBUG:urllib3.connectionpool:https://localhost:14000 "POST /order-plz HTTP/1.1" 400 168
+2026-10-15 11:17:49,401:DEBUG:acme.client:Received response:
+HTTP 400
+Cache-Control: public, max-age=0, no-cache
+Content-Type: application/problem+json; charset=utf-8
+Link: <https://localhost:14000/dir>;rel="index"
+Replay-Nonce: 0yAKpfJQlckE-aDPXcbWxA
+Date: Thu, 15 Oct 2026 05:47:49 GMT
+Content-Length: 168
+
+{
+   "type": "urn:ietf:params:acme:error:accountDoesNotExist",
+   "detail": "Account https://localhost:14000/my-account/5c39e1200e2b6159 not found.",
+   "status": 400
+}
+2026-10-15 11:17:49,401:DEBUG:certbot._internal.log:Exiting abnormally:
+Traceback (most recent call last):
+  File "/opt/homebrew/bin/certbot", line 6, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/main.py", line 18, in main
+    return internal_main.main(cli_args)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/main.py", line 1889, in main
+    return config.func(config, plugins)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/main.py", line 1601, in certonly
+    lineage = _get_and_save_cert(le_client, config, sans, certname, lineage)
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/main.py", line 143, in _get_and_save_cert
+    lineage = le_client.obtain_and_enroll_certificate(sans, certname)
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/client.py", line 533, in obtain_and_enroll_certificate
+    cert, chain, key, _ = self.obtain_certificate(sans)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/client.py", line 434, in obtain_certificate
+    orderr = self._get_order_and_authorizations(csr.data, self.config.allow_subset_of_names)
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/client.py", line 494, in _get_order_and_authorizations
+    orderr = self.acme.new_order(csr_pem, profile=profile)
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/acme/client.py", line 135, in new_order
+    response = self._post(self.directory['newOrder'], order)
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/acme/client.py", line 461, in _post
+    return self.net.post(*args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/acme/client.py", line 812, in post
+    return self._post_once(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/acme/client.py", line 827, in _post_once
+    response = self._check_response(response, content_type=content_type)
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/acme/client.py", line 699, in _check_response
+    raise messages.Error.from_json(jobj)
+acme.messages.Error: urn:ietf:params:acme:error:accountDoesNotExist :: The request specified an account that does not exist :: Account https://localhost:14000/my-account/5c39e1200e2b6159 not found.
+2026-10-15 11:17:49,434:ERROR:certbot._internal.log:An unexpected error occurred:
+2026-10-15 11:17:49,434:ERROR:certbot._internal.log:Account https://localhost:14000/my-account/5c39e1200e2b6159 not found.

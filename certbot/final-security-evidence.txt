@@ -1,0 +1,86 @@
+===== TIMESTAMP =====
+Thu Oct 15 12:18:13 IST 2026
+===== SERVER CERTIFICATE =====
+        Issuer: CN=Pebble Intermediate CA 2bade8
+        Validity
+            Not Before: Oct 15 05:50:41 2026 GMT
+            Not After : Oct 21 05:50:40 2026 GMT
+        Subject: 
+        Subject Public Key Info:
+--
+            X509v3 Subject Alternative Name: critical
+                DNS:transaction-ms.test
+    Signature Algorithm: ecdsa-with-SHA256
+         30:45:02:20:15:51:f4:f2:4b:8f:f1:e0:90:77:04:31:f8:dc:
+===== CLIENT CERTIFICATE =====
+subject= /CN=root-ms
+issuer= /CN=root-ms-client-test-CA
+notBefore=Oct 15 06:36:02 2026 GMT
+notAfter=Nov 14 06:36:02 2026 GMT
+===== LOAD TEST RESOURCE SAMPLES =====
+Time,CPU_percent,RSS_KB,Elapsed
+===== SERVER LOG =====
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use 127.0.0.1:3443
+    at Server.setupListenHandle [as _listen2] (node:net:1941:16)
+    at listenInCluster (node:net:1998:12)
+    at node:net:2207:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1977:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '127.0.0.1',
+  port: 3443
+}
+
+Node.js v22.23.3
+===== LOAD TEST: 50000 REQUESTS =====
+Successful HTTP 200: 50000
+Failed: 0
+Duration: 3.77 seconds
+Throughput: 13252.05 requests/sec
+Average latency: 7.41 ms
+p95: 12 ms
+p99: 16 ms
+===== CERTIFICATE AND KEY MATCH =====
+e254dccef38a9a81390010dd4d13a12d5e09601f8c0583359c39e49f7c83303f  -
+e254dccef38a9a81390010dd4d13a12d5e09601f8c0583359c39e49f7c83303f  -
+===== RESOURCE SAMPLES =====
+14:31:32,0.0,43056,00:03
+14:31:33,109.7,73232,00:04
+14:31:34,102.5,83984,00:05
+14:31:35,100.7,99856,00:06
+14:31:36,30.1,100032,00:07
+14:31:37,0.6,100032,00:08
+14:31:38,0.0,89344,00:09
+14:31:39,0.0,87760,00:10
+14:31:40,0.0,86720,00:11
+14:31:41,0.0,86720,00:12
+14:31:42,0.0,86720,00:13
+14:31:43,0.0,86720,00:14
+14:31:44,0.0,86720,00:15
+14:31:45,0.0,86720,00:16
+14:31:46,0.0,86720,00:17
+14:31:47,0.0,86720,00:18
+14:31:48,0.0,86720,00:19
+14:31:49,0.0,86720,00:20
+14:31:50,0.0,86720,00:21
+14:31:51,0.0,86720,00:22
+14:31:52,0.0,86720,00:23
+14:31:53,0.0,86720,00:24
+14:31:54,5.7,59232,00:25
+14:31:55,0.7,55168,00:26
+14:31:56,0.0,55168,00:27
+14:31:57,0.0,55168,00:28
+14:31:58,0.0,55168,00:29
+14:31:59,0.0,55168,00:30
+14:32:00,0.0,55168,00:31
+14:32:01,0.0,55168,00:32
+===== RENEWAL TEST LIMITATION =====
+Dry-run used Let's Encrypt staging and rejected the local .test hostname; local Pebble renewal remains unverified.

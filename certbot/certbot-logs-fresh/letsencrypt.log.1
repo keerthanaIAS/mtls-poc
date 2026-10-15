@@ -1,0 +1,193 @@
+2026-10-15 12:17:56,373:DEBUG:certbot._internal.main:certbot version: 5.8.0
+2026-10-15 12:17:56,374:DEBUG:certbot._internal.main:Location of certbot entry point: /opt/homebrew/bin/certbot
+2026-10-15 12:17:56,374:DEBUG:certbot._internal.main:Arguments: ['--cert-name', 'transaction-ms', '--dry-run', '--no-verify-ssl', '--config-dir', '/Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh', '--work-dir', '/Users/keerthana/Desktop/mtls-poc/certbot/certbot-work-fresh', '--logs-dir', '/Users/keerthana/Desktop/mtls-poc/certbot/certbot-logs-fresh']
+2026-10-15 12:17:56,374:DEBUG:certbot._internal.main:Discovered plugins: PluginsRegistry(PluginEntryPoint#apache,PluginEntryPoint#dns-cloudflare,PluginEntryPoint#manual,PluginEntryPoint#nginx,PluginEntryPoint#null,PluginEntryPoint#standalone,PluginEntryPoint#webroot)
+2026-10-15 12:17:56,419:DEBUG:certbot._internal.log:Root logging level set at 30
+2026-10-15 12:17:56,442:DEBUG:certbot._internal.display.obj:Notifying user: Processing
+/Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh/renewal/transaction-ms.conf
+2026-10-15 12:17:56,444:DEBUG:certbot.configuration:Var config_dir=/Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh (set by user).
+2026-10-15 12:17:56,444:DEBUG:certbot.configuration:Var logs_dir=/Users/keerthana/Desktop/mtls-poc/certbot/certbot-logs-fresh (set by user).
+2026-10-15 12:17:56,444:DEBUG:certbot.configuration:Var work_dir=/Users/keerthana/Desktop/mtls-poc/certbot/certbot-work-fresh (set by user).
+2026-10-15 12:17:56,444:DEBUG:certbot.configuration:Var server=https://acme-staging-v02.api.letsencrypt.org/directory (set by user).
+2026-10-15 12:17:56,444:DEBUG:certbot.configuration:Var account=None (set by user).
+2026-10-15 12:17:56,444:DEBUG:certbot._internal.plugins.selection:Requested authenticator None and installer None
+2026-10-15 12:17:56,478:INFO:certbot._internal.renewal:Certificate not due for renewal, but simulating renewal for dry run
+2026-10-15 12:17:56,479:DEBUG:certbot._internal.plugins.selection:Requested authenticator manual and installer None
+2026-10-15 12:17:56,479:DEBUG:certbot._internal.plugins.selection:Single candidate plugin: * manual
+Description: Manual configuration or run your own shell scripts
+Interfaces: Authenticator, Plugin
+Entry point: EntryPoint(name='manual', value='certbot._internal.plugins.manual:Authenticator', group='certbot.plugins')
+Initialized: <certbot._internal.plugins.manual.Authenticator object at 0x10ccd6120>
+Prep: True
+2026-10-15 12:17:56,479:DEBUG:certbot._internal.plugins.selection:Selected authenticator <certbot._internal.plugins.manual.Authenticator object at 0x10ccd6120> and installer None
+2026-10-15 12:17:56,479:INFO:certbot._internal.plugins.selection:Plugins selected: Authenticator manual, Installer None
+2026-10-15 12:17:56,539:DEBUG:acme.client:Sending GET request to https://acme-staging-v02.api.letsencrypt.org/directory.
+2026-10-15 12:17:56,554:DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): acme-staging-v02.api.letsencrypt.org:443
+2026-10-15 12:17:57,579:DEBUG:urllib3.connectionpool:https://acme-staging-v02.api.letsencrypt.org:443 "GET /directory HTTP/1.1" 200 1035
+2026-10-15 12:17:57,580:DEBUG:acme.client:Received response:
+HTTP 200
+Server: nginx
+Date: Thu, 15 Oct 2026 06:47:57 GMT
+Content-Type: application/json
+Content-Length: 1035
+Connection: keep-alive
+Cache-Control: public, max-age=0, no-cache
+X-Frame-Options: DENY
+Strict-Transport-Security: max-age=604800
+
+{
+  "TUEU-KrIcEY": "https://community.letsencrypt.org/t/adding-random-entries-to-the-directory/33417",
+  "keyChange": "https://acme-staging-v02.api.letsencrypt.org/acme/key-change",
+  "meta": {
+    "caaIdentities": [
+      "letsencrypt.org"
+    ],
+    "profiles": {
+      "classic": "https://letsencrypt.org/docs/profiles#classic",
+      "shortlived": "https://letsencrypt.org/docs/profiles#shortlived",
+      "tlsserver": "https://letsencrypt.org/docs/profiles#tlsserver"
+    },
+    "termsOfService": "https://letsencrypt.org/documents/LE-SA-v1.8-July-06-2026.pdf",
+    "website": "https://letsencrypt.org/docs/staging-environment/"
+  },
+  "newAccount": "https://acme-staging-v02.api.letsencrypt.org/acme/new-acct",
+  "newNonce": "https://acme-staging-v02.api.letsencrypt.org/acme/new-nonce",
+  "newOrder": "https://acme-staging-v02.api.letsencrypt.org/acme/new-order",
+  "renewalInfo": "https://acme-staging-v02.api.letsencrypt.org/acme/renewal-info",
+  "revokeCert": "https://acme-staging-v02.api.letsencrypt.org/acme/revoke-cert"
+}
+2026-10-15 12:17:57,581:DEBUG:acme.client:Requesting fresh nonce
+2026-10-15 12:17:57,581:DEBUG:acme.client:Sending HEAD request to https://acme-staging-v02.api.letsencrypt.org/acme/new-nonce.
+2026-10-15 12:17:57,886:DEBUG:urllib3.connectionpool:https://acme-staging-v02.api.letsencrypt.org:443 "HEAD /acme/new-nonce HTTP/1.1" 200 0
+2026-10-15 12:17:57,886:DEBUG:acme.client:Received response:
+HTTP 200
+Server: nginx
+Date: Thu, 15 Oct 2026 06:47:57 GMT
+Connection: keep-alive
+Cache-Control: public, max-age=0, no-cache
+Link: <https://acme-staging-v02.api.letsencrypt.org/directory>;rel="index"
+Replay-Nonce: DXQEv_ZsniQgfvW0PqALoFtSr2SRTJbemMnhrRkhvRJ2yY-4GhU
+X-Frame-Options: DENY
+Strict-Transport-Security: max-age=604800
+
+
+2026-10-15 12:17:57,886:DEBUG:acme.client:Storing nonce: DXQEv_ZsniQgfvW0PqALoFtSr2SRTJbemMnhrRkhvRJ2yY-4GhU
+2026-10-15 12:17:57,886:DEBUG:acme.client:JWS payload:
+b'{\n  "termsOfServiceAgreed": true\n}'
+2026-10-15 12:17:57,890:DEBUG:acme.client:Sending POST request to https://acme-staging-v02.api.letsencrypt.org/acme/new-acct:
+{
+  "protected": "eyJhbGciOiAiUlMyNTYiLCAiandrIjogeyJuIjogInNINWg0eldNR254MzdMYzFMdk43Z1pxTEtDbGhUSG0weUxvV2pzVUlpb1ducFN2WnlHT3lSMFZUZVFaTFUwcXN5b19EaF9td2xtY1NaM2owWUpneG5RQmNOczdaT1RVbXFJTWcwVS1rRGFtMVAxdXlwLXhPQ3dBWklrbGNkN0FLQS05UlZaNDljRFhlUHdQcEQxc21zVTdEVDFFaEU0T1JuYVRoSXZwLVdFZ2RYNklsREJERmRKbnRUOURGVF9TNEtxU0RkNkdrdDByWjlGd0w0Y1hnNU5RRkhxSVlDWWc0MmQyMnEzcW9acklXajF1eW9yWnJ5Y1d6SlRoTko4NHp3OUFpYXo5SGdoUkZTTUsyZmw3ZkJiRmtKMGFjZEh6TGQtaTgxalR5UW9iVU1PMU5iTUFielNBU3FvQV84cm5ERkdDX1Q1b3ZMWDAxYlFYdUVRZUdfUSIsICJlIjogIkFRQUIiLCAia3R5IjogIlJTQSJ9LCAibm9uY2UiOiAiRFhRRXZfWnNuaVFnZnZXMFBxQUxvRnRTcjJTUlRKYmVtTW5oclJraHZSSjJ5WS00R2hVIiwgInVybCI6ICJodHRwczovL2FjbWUtc3RhZ2luZy12MDIuYXBpLmxldHNlbmNyeXB0Lm9yZy9hY21lL25ldy1hY2N0In0",
+  "signature": "UPTvsb5HovAGipPKLIETmzjgIec7ZxpztlP0B5ONH-UEH2o58h9fwIiJKDbFzhEwDrba_1TvwhRzRfBitFtinS1emN63I61THlw4B1pQ2YErZmB3l9D1eorXvN04Aa0e1X8gqEh_HaFWKOQ60rwciEZKFjNbu0qOovNkFFxJmGroFemhsTjGAnDOb4nAN0d8CK5mVExJiSxat6b_IazSID2pSzj5jzUmjVrwkB9R3NPbL-xN2Wm16iMiUSpXG93h7FmsnNCOzsJc1TLn5GRyrPGuGKr8AAO6NK2W20MC11onHwd9RGNuxgVkdf2XWOrhPrqNgBn5-u96hnHDeo5wIw",
+  "payload": "ewogICJ0ZXJtc09mU2VydmljZUFncmVlZCI6IHRydWUKfQ"
+}
+2026-10-15 12:17:58,195:DEBUG:urllib3.connectionpool:https://acme-staging-v02.api.letsencrypt.org:443 "POST /acme/new-acct HTTP/1.1" 201 476
+2026-10-15 12:17:58,196:DEBUG:acme.client:Received response:
+HTTP 201
+Server: nginx
+Date: Thu, 15 Oct 2026 06:47:58 GMT
+Content-Type: application/json
+Content-Length: 476
+Connection: keep-alive
+Boulder-Requester: 353543343
+Cache-Control: public, max-age=0, no-cache
+Link: <https://acme-staging-v02.api.letsencrypt.org/directory>;rel="index", <https://letsencrypt.org/documents/LE-SA-v1.8-July-06-2026.pdf>;rel="terms-of-service"
+Location: https://acme-staging-v02.api.letsencrypt.org/acme/acct/353543343
+Replay-Nonce: XCh_CT5hOjnXFnPM0uTeP8_XEadyNwgKURU79EGSuaCRTerq4jI
+X-Frame-Options: DENY
+Strict-Transport-Security: max-age=604800
+
+{
+  "key": {
+    "kty": "RSA",
+    "n": "sH5h4zWMGnx37Lc1LvN7gZqLKClhTHm0yLoWjsUIioWnpSvZyGOyR0VTeQZLU0qsyo_Dh_mwlmcSZ3j0YJgxnQBcNs7ZOTUmqIMg0U-kDam1P1uyp-xOCwAZIklcd7AKA-9RVZ49cDXePwPpD1smsU7DT1EhE4ORnaThIvp-WEgdX6IlDBDFdJntT9DFT_S4KqSDd6Gkt0rZ9FwL4cXg5NQFHqIYCYg42d22q3qoZrIWj1uyorZrycWzJThNJ84zw9Aiaz9HghRFSMK2fl7fBbFkJ0acdHzLd-i81jTyQobUMO1NbMAbzSASqoA_8rnDFGC_T5ovLX01bQXuEQeG_Q",
+    "e": "AQAB"
+  },
+  "createdAt": "2026-10-15T06:47:58.00624342Z",
+  "status": "valid"
+}
+2026-10-15 12:17:58,196:DEBUG:acme.client:Storing nonce: XCh_CT5hOjnXFnPM0uTeP8_XEadyNwgKURU79EGSuaCRTerq4jI
+2026-10-15 12:17:58,207:DEBUG:certbot._internal.display.obj:Notifying user: Account registered.
+2026-10-15 12:17:58,207:DEBUG:certbot._internal.main:Picked account: <Account(RegistrationResource(body=Registration(key=JWKRSA(key=<ComparableRSAKey(<cryptography.hazmat.bindings._rust.openssl.rsa.RSAPublicKey object at 0x10ca73d50>)>), contact=(), agreement=None, status='valid', terms_of_service_agreed=None, only_return_existing=None, external_account_binding=None), uri='https://acme-staging-v02.api.letsencrypt.org/acme/acct/353543343', new_authzr_uri=None, terms_of_service='https://letsencrypt.org/documents/LE-SA-v1.8-July-06-2026.pdf'), 236560d23a4a2affbe39b3d99f7401ce, Meta(creation_dt=datetime.datetime(2026, 10, 15, 6, 47, 58, tzinfo=datetime.timezone.utc), creation_host='Keerthanas-MacBook-Air.local', register_to_eff=None))>
+2026-10-15 12:17:58,211:DEBUG:certbot._internal.display.obj:Notifying user: Simulating renewal of an existing certificate for transaction-ms.test
+2026-10-15 12:17:58,216:DEBUG:acme.client:JWS payload:
+b'{\n  "identifiers": [\n    {\n      "type": "dns",\n      "value": "transaction-ms.test"\n    }\n  ]\n}'
+2026-10-15 12:17:58,219:DEBUG:acme.client:Sending POST request to https://acme-staging-v02.api.letsencrypt.org/acme/new-order:
+{
+  "protected": "eyJhbGciOiAiUlMyNTYiLCAia2lkIjogImh0dHBzOi8vYWNtZS1zdGFnaW5nLXYwMi5hcGkubGV0c2VuY3J5cHQub3JnL2FjbWUvYWNjdC8zNTM1NDMzNDMiLCAibm9uY2UiOiAiWENoX0NUNWhPam5YRm5QTTB1VGVQOF9YRWFkeU53Z0tVUlU3OUVHU3VhQ1JUZXJxNGpJIiwgInVybCI6ICJodHRwczovL2FjbWUtc3RhZ2luZy12MDIuYXBpLmxldHNlbmNyeXB0Lm9yZy9hY21lL25ldy1vcmRlciJ9",
+  "signature": "HY_NLUxzfe3jZCFiBBlsnt9SRWfh0VxYYhDn1sa639bM_fKOYkMxCVUletAUAACd1vm10RtrexWqo8lO1u56LboKmd6ybYT7-R4DkDVV3FbwHQDvwAvrJ6x8jVQNEDa6_YTNK2MNx7fju5JqxwPe9Zrq-1sdRbJo0LTWRcSYuB0haT2v6otjSA75-Uq_h_HE0OoIlytdbecO1fAXMsTVZEvBiU3LCy_Q11Vh_jyI-yhgm-ergh3I616wyN-8P-VQeSVKujS0D5Uv6zje4XzolrJ1wAgF3g9GCpY3JaGiNS60aTk_U1aMR1BD2bDe7z5_jGMrqENXl-ni39_LVz4oqA",
+  "payload": "ewogICJpZGVudGlmaWVycyI6IFsKICAgIHsKICAgICAgInR5cGUiOiAiZG5zIiwKICAgICAgInZhbHVlIjogInRyYW5zYWN0aW9uLW1zLnRlc3QiCiAgICB9CiAgXQp9"
+}
+2026-10-15 12:17:58,502:DEBUG:urllib3.connectionpool:https://acme-staging-v02.api.letsencrypt.org:443 "POST /acme/new-order HTTP/1.1" 400 226
+2026-10-15 12:17:58,503:DEBUG:acme.client:Received response:
+HTTP 400
+Server: nginx
+Date: Thu, 15 Oct 2026 06:47:58 GMT
+Content-Type: application/problem+json
+Content-Length: 226
+Connection: keep-alive
+Boulder-Requester: 353543343
+Cache-Control: public, max-age=0, no-cache
+Link: <https://acme-staging-v02.api.letsencrypt.org/directory>;rel="index"
+Replay-Nonce: DXQEv_ZsLP6Z3n10iQDWFnGfdbRqHChFXT1k5g99eAH5_N1LyTU
+
+{
+  "type": "urn:ietf:params:acme:error:rejectedIdentifier",
+  "detail": "Invalid identifiers requested :: Cannot issue for \"transaction-ms.test\": Domain name does not end with a valid public suffix (TLD)",
+  "status": 400
+}
+2026-10-15 12:17:58,504:ERROR:certbot._internal.renewal:Failed to renew certificate transaction-ms with error: urn:ietf:params:acme:error:rejectedIdentifier :: The server will not issue certificates for the identifier :: Invalid identifiers requested :: Cannot issue for "transaction-ms.test": Domain name does not end with a valid public suffix (TLD)
+2026-10-15 12:17:58,548:DEBUG:certbot._internal.renewal:Traceback was:
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/renewal.py", line 715, in handle_renewal_request
+    main.renew_cert(lineage_config, plugins, renewal_candidate)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/main.py", line 1551, in renew_cert
+    renewed_lineage = _get_and_save_cert(le_client, config, lineage=lineage)
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/main.py", line 131, in _get_and_save_cert
+    renewal.renew_cert(config, sans, le_client, lineage)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/renewal.py", line 565, in renew_cert
+    new_cert, new_chain, new_key, _ = le_client.obtain_certificate(sans, new_key)
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/client.py", line 434, in obtain_certificate
+    orderr = self._get_order_and_authorizations(csr.data, self.config.allow_subset_of_names)
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/client.py", line 494, in _get_order_and_authorizations
+    orderr = self.acme.new_order(csr_pem, profile=profile)
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/acme/client.py", line 135, in new_order
+    response = self._post(self.directory['newOrder'], order)
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/acme/client.py", line 461, in _post
+    return self.net.post(*args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/acme/client.py", line 812, in post
+    return self._post_once(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/acme/client.py", line 827, in _post_once
+    response = self._check_response(response, content_type=content_type)
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/acme/client.py", line 699, in _check_response
+    raise messages.Error.from_json(jobj)
+acme.messages.Error: urn:ietf:params:acme:error:rejectedIdentifier :: The server will not issue certificates for the identifier :: Invalid identifiers requested :: Cannot issue for "transaction-ms.test": Domain name does not end with a valid public suffix (TLD)
+
+2026-10-15 12:17:58,552:DEBUG:certbot._internal.display.obj:Notifying user: 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2026-10-15 12:17:58,552:ERROR:certbot._internal.renewal:All simulated renewals failed. The following certificates could not be renewed:
+2026-10-15 12:17:58,552:ERROR:certbot._internal.renewal:  /Users/keerthana/Desktop/mtls-poc/certbot/certbot-config-fresh/live/transaction-ms/fullchain.pem (failure)
+2026-10-15 12:17:58,552:DEBUG:certbot._internal.display.obj:Notifying user: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2026-10-15 12:17:58,552:DEBUG:certbot._internal.log:Exiting abnormally:
+Traceback (most recent call last):
+  File "/opt/homebrew/bin/certbot", line 6, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/main.py", line 18, in main
+    return internal_main.main(cli_args)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/main.py", line 1889, in main
+    return config.func(config, plugins)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/main.py", line 1639, in renew
+    renewal.handle_renewal_request(config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/renewal.py", line 745, in handle_renewal_request
+    raise errors.Error(
+        f"{len(renew_failures)} renew failure(s), {len(parse_failures)} parse failure(s)")
+certbot.errors.Error: 1 renew failure(s), 0 parse failure(s)
+2026-10-15 12:17:58,556:ERROR:certbot._internal.log:1 renew failure(s), 0 parse failure(s)

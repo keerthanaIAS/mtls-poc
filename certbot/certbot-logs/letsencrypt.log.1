@@ -1,0 +1,317 @@
+2026-10-15 11:13:39,299:DEBUG:certbot._internal.main:certbot version: 5.8.0
+2026-10-15 11:13:39,300:DEBUG:certbot._internal.main:Location of certbot entry point: /opt/homebrew/bin/certbot
+2026-10-15 11:13:39,300:DEBUG:certbot._internal.main:Arguments: ['--server', 'https://localhost:14000/dir', '--no-verify-ssl', '--manual', '--preferred-challenges', 'http', '--manual-auth-hook', '/Users/keerthana/Desktop/mtls-poc/certbot/hooks/auth.sh', '--manual-cleanup-hook', '/Users/keerthana/Desktop/mtls-poc/certbot/hooks/cleanup.sh', '--agree-tos', '--email', 'test@example.com', '--non-interactive', '--cert-name', 'transaction-ms', '-d', 'transaction-ms.test', '--config-dir', '/Users/keerthana/Desktop/mtls-poc/certbot/certbot-config', '--work-dir', '/Users/keerthana/Desktop/mtls-poc/certbot/certbot-work', '--logs-dir', '/Users/keerthana/Desktop/mtls-poc/certbot/certbot-logs']
+2026-10-15 11:13:39,300:DEBUG:certbot._internal.main:Discovered plugins: PluginsRegistry(PluginEntryPoint#apache,PluginEntryPoint#dns-cloudflare,PluginEntryPoint#manual,PluginEntryPoint#nginx,PluginEntryPoint#null,PluginEntryPoint#standalone,PluginEntryPoint#webroot)
+2026-10-15 11:13:39,340:DEBUG:certbot._internal.log:Root logging level set at 30
+2026-10-15 11:13:39,343:DEBUG:certbot._internal.plugins.selection:Requested authenticator manual and installer None
+2026-10-15 11:13:39,345:DEBUG:certbot._internal.plugins.selection:Single candidate plugin: * manual
+Description: Manual configuration or run your own shell scripts
+Interfaces: Authenticator, Plugin
+Entry point: EntryPoint(name='manual', value='certbot._internal.plugins.manual:Authenticator', group='certbot.plugins')
+Initialized: <certbot._internal.plugins.manual.Authenticator object at 0x10826ecf0>
+Prep: True
+2026-10-15 11:13:39,345:DEBUG:certbot._internal.plugins.selection:Selected authenticator <certbot._internal.plugins.manual.Authenticator object at 0x10826ecf0> and installer None
+2026-10-15 11:13:39,345:INFO:certbot._internal.plugins.selection:Plugins selected: Authenticator manual, Installer None
+2026-10-15 11:13:39,442:DEBUG:acme.client:Sending GET request to https://localhost:14000/dir.
+2026-10-15 11:13:39,462:DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): localhost:14000
+2026-10-15 11:13:39,492:DEBUG:urllib3.connectionpool:https://localhost:14000 "GET /dir HTTP/1.1" 200 716
+2026-10-15 11:13:39,493:DEBUG:acme.client:Received response:
+HTTP 200
+Cache-Control: public, max-age=0, no-cache
+Content-Type: application/json; charset=utf-8
+Date: Thu, 15 Oct 2026 05:43:39 GMT
+Content-Length: 716
+
+{
+   "keyChange": "https://localhost:14000/rollover-account-key",
+   "meta": {
+      "caaIdentities": [
+         "pebble.letsencrypt.org"
+      ],
+      "externalAccountRequired": false,
+      "profiles": {
+         "default": "The profile you know and love",
+         "shortlived": "A short-lived cert profile, without actual enforcement"
+      },
+      "termsOfService": "data:text/plain,Do%20what%20thou%20wilt"
+   },
+   "newAccount": "https://localhost:14000/sign-me-up",
+   "newNonce": "https://localhost:14000/nonce-plz",
+   "newOrder": "https://localhost:14000/order-plz",
+   "renewalInfo": "https://localhost:14000/draft-ietf-acme-ari-03/renewalInfo",
+   "revokeCert": "https://localhost:14000/revoke-cert"
+}
+2026-10-15 11:13:39,493:DEBUG:acme.client:Requesting fresh nonce
+2026-10-15 11:13:39,493:DEBUG:acme.client:Sending HEAD request to https://localhost:14000/nonce-plz.
+2026-10-15 11:13:39,495:DEBUG:urllib3.connectionpool:https://localhost:14000 "HEAD /nonce-plz HTTP/1.1" 200 0
+2026-10-15 11:13:39,495:DEBUG:acme.client:Received response:
+HTTP 200
+Cache-Control: public, max-age=0, no-cache
+Link: <https://localhost:14000/dir>;rel="index"
+Replay-Nonce: mzWnWb1QWs6ZBZiXKtcbSQ
+Date: Thu, 15 Oct 2026 05:43:39 GMT
+
+
+2026-10-15 11:13:39,495:DEBUG:acme.client:Storing nonce: mzWnWb1QWs6ZBZiXKtcbSQ
+2026-10-15 11:13:39,495:DEBUG:acme.client:JWS payload:
+b'{\n  "contact": [\n    "mailto:test@example.com"\n  ],\n  "termsOfServiceAgreed": true\n}'
+2026-10-15 11:13:39,499:DEBUG:acme.client:Sending POST request to https://localhost:14000/sign-me-up:
+{
+  "protected": "eyJhbGciOiAiUlMyNTYiLCAiandrIjogeyJuIjogInZ1RHN4U0QwQ3VnMTNEd0czNGd6dmpSREdQcF9pNk9YZnJNOXNvaWpDQmRlMlJtRWhEbG1vaVR2OGRjX0pFX1Nvc3lUSnp5T1ZqWEhYcVpWMXRsMHJ0TmlPVDhLUksza3ZDYjd5Ym01ZWJjUDJtNlRUU0hCZDF5MWJEQ3FXWjVBUlZJc1YxenlrR21hcnhZTGl1ZkRUNlBDNzFzZ2lrWmN5MFM0dVpmWk83TVQ3Wl9qLUVMMU5VdV9oTU1nMlBmd3dmZUpiZ005QzdXcWRkSDVzRGpTajVTRENWU2d5bWg3N1FPamlzN0E4ZDBLZ2tiUW1mSHhQRkRmUHp2dE9XUXRidDNMbFJfN1M2dkpHQlBpSHFncXNOQ2w2dm1GbGNlQ2RyS0c4NDdxNEZZWll6cDlnMmF1alU1YUJCWC1BNlNKZXEyNXZnYjZxUTBHbjZReWV5RDBkUSIsICJlIjogIkFRQUIiLCAia3R5IjogIlJTQSJ9LCAibm9uY2UiOiAibXpXbldiMVFXczZaQlppWEt0Y2JTUSIsICJ1cmwiOiAiaHR0cHM6Ly9sb2NhbGhvc3Q6MTQwMDAvc2lnbi1tZS11cCJ9",
+  "signature": "bqXnNTbx5qc7o-juY3jb591KznWNf8hAv6wWiRRc_hwTbcoJNEjtFLZ5A5oGoPwuhuD8mFOtPMsr6Ut0O8iWUduQw9CvxmUa8fB1-WOwQ_KZTV8TxVyTZi_gmN3n3nWYgDj_tx8yZPZNbkXQM0lerZJL-TFbkPIiYWBQ-BREWk9rqCFJeoVq7TMec52JbhVhtprpatW1JuK9QexcaWWT3kccuRL8fLvplrAO7V2YtOLfV9ZBApOJeocArh4YsEc2niofMuhhkN8mh6ZKJIOw2pVEaJEd46s33UZeptowh58rwZnwe7xbSyc6cekdYtNxZbbh4CMFd7xse16AXbBJwA",
+  "payload": "ewogICJjb250YWN0IjogWwogICAgIm1haWx0bzp0ZXN0QGV4YW1wbGUuY29tIgogIF0sCiAgInRlcm1zT2ZTZXJ2aWNlQWdyZWVkIjogdHJ1ZQp9"
+}
+2026-10-15 11:13:39,501:DEBUG:urllib3.connectionpool:https://localhost:14000 "POST /sign-me-up HTTP/1.1" 201 560
+2026-10-15 11:13:39,501:DEBUG:acme.client:Received response:
+HTTP 201
+Cache-Control: public, max-age=0, no-cache
+Content-Type: application/json; charset=utf-8
+Link: <https://localhost:14000/dir>;rel="index"
+Location: https://localhost:14000/my-account/5c39e1200e2b6159
+Replay-Nonce: EymoTOVKmRj2AqC4Pnf-lg
+Date: Thu, 15 Oct 2026 05:43:39 GMT
+Content-Length: 560
+
+{
+   "status": "valid",
+   "contact": [
+      "mailto:test@example.com"
+   ],
+   "orders": "https://localhost:14000/list-orderz/5c39e1200e2b6159",
+   "key": {
+      "kty": "RSA",
+      "n": "vuDsxSD0Cug13DwG34gzvjRDGPp_i6OXfrM9soijCBde2RmEhDlmoiTv8dc_JE_SosyTJzyOVjXHXqZV1tl0rtNiOT8KRK3kvCb7ybm5ebcP2m6TTSHBd1y1bDCqWZ5ARVIsV1zykGmarxYLiufDT6PC71sgikZcy0S4uZfZO7MT7Z_j-EL1NUu_hMMg2PfwwfeJbgM9C7WqddH5sDjSj5SDCVSgymh77QOjis7A8d0KgkbQmfHxPFDfPzvtOWQtbt3LlR_7S6vJGBPiHqgqsNCl6vmFlceCdrKG847q4FYZYzp9g2aujU5aBBX-A6SJeq25vgb6qQ0Gn6QyeyD0dQ",
+      "e": "AQAB"
+   }
+}
+2026-10-15 11:13:39,501:DEBUG:acme.client:Storing nonce: EymoTOVKmRj2AqC4Pnf-lg
+2026-10-15 11:13:39,509:DEBUG:certbot._internal.display.obj:Notifying user: Account registered.
+2026-10-15 11:13:39,509:DEBUG:certbot._internal.main:Picked account: <Account(RegistrationResource(body=Registration(key=JWKRSA(key=<ComparableRSAKey(<cryptography.hazmat.bindings._rust.openssl.rsa.RSAPublicKey object at 0x109a9d870>)>), contact=('mailto:test@example.com',), agreement=None, status='valid', terms_of_service_agreed=None, only_return_existing=None, external_account_binding=None), uri='https://localhost:14000/my-account/5c39e1200e2b6159', new_authzr_uri=None, terms_of_service=None), 7caa8bd794c399560b471fdf53807c53, Meta(creation_dt=datetime.datetime(2026, 10, 15, 5, 43, 39, tzinfo=datetime.timezone.utc), creation_host='Mac-432.lan', register_to_eff=None))>
+2026-10-15 11:13:39,510:DEBUG:certbot._internal.display.obj:Notifying user: Requesting a certificate for transaction-ms.test
+2026-10-15 11:13:39,515:DEBUG:acme.client:JWS payload:
+b'{\n  "identifiers": [\n    {\n      "type": "dns",\n      "value": "transaction-ms.test"\n    }\n  ]\n}'
+2026-10-15 11:13:39,515:DEBUG:acme.client:Sending POST request to https://localhost:14000/order-plz:
+{
+  "protected": "eyJhbGciOiAiUlMyNTYiLCAia2lkIjogImh0dHBzOi8vbG9jYWxob3N0OjE0MDAwL215LWFjY291bnQvNWMzOWUxMjAwZTJiNjE1OSIsICJub25jZSI6ICJFeW1vVE9WS21SajJBcUM0UG5mLWxnIiwgInVybCI6ICJodHRwczovL2xvY2FsaG9zdDoxNDAwMC9vcmRlci1wbHoifQ",
+  "signature": "NDsBJE48FsGIkJP2TLzJD91bs4HSdnqNCYwum0kfqhfWuVJLzhNztLK_PS97lT8123gwVEO7za4iXrkWpqwZ5Lhv8YY-mLHD7TGJsiv7J17FAs-1IYVJg3q_npa_N_WXj4MRftL5o4zhqnUusy6KKkq60DnlEQWsBg6vagq3UVhCJUwpmh7pEkvurW7BBo0Dhfrf7EykNdIETYxcYWspba3B7jN4xDcN5iUV0Zlm049UAIlvjo246nLGPClTEL9BZOFUvSs8_Pu0nz_JWSi-RBaWY2-Td-JS-ZpVNVfx0q47A5V2ZA6SLchj2v4_jRFSxF5P_oGQHqFIyY6l63pKvw",
+  "payload": "ewogICJpZGVudGlmaWVycyI6IFsKICAgIHsKICAgICAgInR5cGUiOiAiZG5zIiwKICAgICAgInZhbHVlIjogInRyYW5zYWN0aW9uLW1zLnRlc3QiCiAgICB9CiAgXQp9"
+}
+2026-10-15 11:13:39,517:DEBUG:urllib3.connectionpool:https://localhost:14000 "POST /order-plz HTTP/1.1" 201 407
+2026-10-15 11:13:39,518:DEBUG:acme.client:Received response:
+HTTP 201
+Cache-Control: public, max-age=0, no-cache
+Content-Type: application/json; charset=utf-8
+Link: <https://localhost:14000/dir>;rel="index"
+Location: https://localhost:14000/my-order/obWPp2d_bELriRkXIBIEjY5ZD14DFAETQFTh88UkDUw
+Replay-Nonce: grKDhdHFxN3qXnfjvkwoVw
+Date: Thu, 15 Oct 2026 05:43:39 GMT
+Content-Length: 407
+
+{
+   "status": "pending",
+   "expires": "2026-10-16T05:43:39Z",
+   "identifiers": [
+      {
+         "type": "dns",
+         "value": "transaction-ms.test"
+      }
+   ],
+   "profile": "default",
+   "finalize": "https://localhost:14000/finalize-order/obWPp2d_bELriRkXIBIEjY5ZD14DFAETQFTh88UkDUw",
+   "authorizations": [
+      "https://localhost:14000/authZ/pUjvi1wrP0vgnB_mK2mB-5ansCI1ztifbXz10SDXFPU"
+   ]
+}
+2026-10-15 11:13:39,518:DEBUG:acme.client:Storing nonce: grKDhdHFxN3qXnfjvkwoVw
+2026-10-15 11:13:39,518:DEBUG:acme.client:JWS payload:
+b''
+2026-10-15 11:13:39,519:DEBUG:acme.client:Sending POST request to https://localhost:14000/authZ/pUjvi1wrP0vgnB_mK2mB-5ansCI1ztifbXz10SDXFPU:
+{
+  "protected": "eyJhbGciOiAiUlMyNTYiLCAia2lkIjogImh0dHBzOi8vbG9jYWxob3N0OjE0MDAwL215LWFjY291bnQvNWMzOWUxMjAwZTJiNjE1OSIsICJub25jZSI6ICJncktEaGRIRnhOM3FYbmZqdmt3b1Z3IiwgInVybCI6ICJodHRwczovL2xvY2FsaG9zdDoxNDAwMC9hdXRoWi9wVWp2aTF3clAwdmduQl9tSzJtQi01YW5zQ0kxenRpZmJYejEwU0RYRlBVIn0",
+  "signature": "eANVZyBmSOXADShgG792ljDNTNgb1fq6Jm_Lmqzvdovgib0vGlps8C2NsCfIWR1om2YQrF-rM9U4Q-SJmQ1c6eGB6iZt54Gs37BZPbk5qzJAYWmxb2nna0qK-1WV_RuzSOsyQg8vJDP9T6TzO-9KcMBRHDFRNLisPg9UvlZRPgyMxcn6XDjyBh55HDWzt_U1oEaXdOYQ3F-MybbVqjpy3FhvI670PQgwvoH5XAsk9irh8P0Oq1nsWrQLTFw3LaOq5ZwEwCWlyoPSnZ6XoSKrruSkdtLTMn87x1imbpkIi9TeV4S8cbYa4lKyBr-I9XsuCqvIRB7zB7uYq80fwaacVQ",
+  "payload": ""
+}
+2026-10-15 11:13:39,520:DEBUG:urllib3.connectionpool:https://localhost:14000 "POST /authZ/pUjvi1wrP0vgnB_mK2mB-5ansCI1ztifbXz10SDXFPU HTTP/1.1" 200 1444
+2026-10-15 11:13:39,520:DEBUG:acme.client:Received response:
+HTTP 200
+Cache-Control: public, max-age=0, no-cache
+Content-Type: application/json; charset=utf-8
+Link: <https://localhost:14000/dir>;rel="index"
+Replay-Nonce: K1hC_XEX53TUw4_wVrkXWw
+Date: Thu, 15 Oct 2026 05:43:39 GMT
+Content-Length: 1444
+
+{
+   "status": "pending",
+   "identifier": {
+      "type": "dns",
+      "value": "transaction-ms.test"
+   },
+   "challenges": [
+      {
+         "type": "http-01",
+         "url": "https://localhost:14000/chalZ/q3gO1of8eEFtwQ3M_53kAUUroimAZab35DlNE8uMaDs",
+         "token": "wC9F7Yd-mJDUNDQVq1e9LQjoRUrgoPie7d4RPdQ1lTs",
+         "status": "pending"
+      },
+      {
+         "type": "dns-persist-01",
+         "url": "https://localhost:14000/chalZ/EZf6yXKiRKNNdOb3TEVQWpOUlPfid9moT8suz8lhsDo",
+         "status": "pending",
+         "accounturi": "https://localhost:14000/my-account/5c39e1200e2b6159",
+         "issuer-domain-names": [
+            "pebble.letsencrypt.org"
+         ]
+      },
+      {
+         "type": "dns-01",
+         "url": "https://localhost:14000/chalZ/IZAvHSZHfwZ9XbRDYYgscfQSJQnaFUahfxsC-S1IpZg",
+         "token": "g8Faahnw5rSys7HZhaLJrWnzSg7D_jfzxQMJGxQ7ZP0",
+         "status": "pending"
+      },
+      {
+         "type": "dns-account-01",
+         "url": "https://localhost:14000/chalZ/ODOyunldme3QpyuFxef7J-uD8Bi62hNxjBhajftOWWI",
+         "token": "1_VfEtPHvB8efqgZL3JScb-912TrW1SwOe9XMBFy9is",
+         "status": "pending"
+      },
+      {
+         "type": "tls-alpn-01",
+         "url": "https://localhost:14000/chalZ/RvzHDL0knTeh6bPLuX1PGcsNELHs1kF8muVtRR3vbQg",
+         "token": "N6ytFAqpr9j_bNPW9amn9ZGHVQdXwHn7NMeY09pUWBs",
+         "status": "pending"
+      }
+   ],
+   "expires": "2026-10-15T06:43:39Z"
+}
+2026-10-15 11:13:39,520:DEBUG:acme.client:Storing nonce: K1hC_XEX53TUw4_wVrkXWw
+2026-10-15 11:13:39,520:DEBUG:acme.challenges:dns-persist-01 was not recognized, full message: {'type': 'dns-persist-01', 'url': 'https://localhost:14000/chalZ/EZf6yXKiRKNNdOb3TEVQWpOUlPfid9moT8suz8lhsDo', 'status': 'pending', 'accounturi': 'https://localhost:14000/my-account/5c39e1200e2b6159', 'issuer-domain-names': ['pebble.letsencrypt.org']}
+2026-10-15 11:13:39,520:DEBUG:acme.challenges:dns-account-01 was not recognized, full message: {'type': 'dns-account-01', 'url': 'https://localhost:14000/chalZ/ODOyunldme3QpyuFxef7J-uD8Bi62hNxjBhajftOWWI', 'token': '1_VfEtPHvB8efqgZL3JScb-912TrW1SwOe9XMBFy9is', 'status': 'pending'}
+2026-10-15 11:13:39,521:DEBUG:acme.challenges:tls-alpn-01 was not recognized, full message: {'type': 'tls-alpn-01', 'url': 'https://localhost:14000/chalZ/RvzHDL0knTeh6bPLuX1PGcsNELHs1kF8muVtRR3vbQg', 'token': 'N6ytFAqpr9j_bNPW9amn9ZGHVQdXwHn7NMeY09pUWBs', 'status': 'pending'}
+2026-10-15 11:13:39,521:INFO:certbot._internal.auth_handler:Performing the following challenges:
+2026-10-15 11:13:39,521:INFO:certbot._internal.auth_handler:http-01 challenge for Identifier(typ=IdentifierType(dns), value='transaction-ms.test')
+2026-10-15 11:13:39,521:INFO:certbot.compat.misc:Running manual-auth-hook command: /Users/keerthana/Desktop/mtls-poc/certbot/hooks/auth.sh
+2026-10-15 11:13:40,112:WARNING:certbot.display.ops:Hook '--manual-auth-hook' for transaction-ms.test reported error code 7
+2026-10-15 11:13:40,112:WARNING:certbot.display.ops:Hook '--manual-auth-hook' for transaction-ms.test ran with error output:
+ curl: (7) Failed to connect to 127.0.0.1 port 8055 after 1 ms: Couldn't connect to server
+2026-10-15 11:13:40,113:DEBUG:acme.client:JWS payload:
+b'{}'
+2026-10-15 11:13:40,115:DEBUG:acme.client:Sending POST request to https://localhost:14000/chalZ/q3gO1of8eEFtwQ3M_53kAUUroimAZab35DlNE8uMaDs:
+{
+  "protected": "eyJhbGciOiAiUlMyNTYiLCAia2lkIjogImh0dHBzOi8vbG9jYWxob3N0OjE0MDAwL215LWFjY291bnQvNWMzOWUxMjAwZTJiNjE1OSIsICJub25jZSI6ICJLMWhDX1hFWDUzVFV3NF93VnJrWFd3IiwgInVybCI6ICJodHRwczovL2xvY2FsaG9zdDoxNDAwMC9jaGFsWi9xM2dPMW9mOGVFRnR3UTNNXzUza0FVVXJvaW1BWmFiMzVEbE5FOHVNYURzIn0",
+  "signature": "VvdbOQqPdsfmNC1C50u--ZbgUmQZtqL-59gz_ruSYf8yqoC-3fXG71I82g8sw4IHt-bBVeuTYKGJ2hMJeipF4evGRpwqe15lskOldpCcpW9Zh0bxQaWEGC1KEZ5oz0xN_l001GZJlBOR-K08xmv3WYuzUWpvggnmEUApMNXyJZtf5sxZyrypQt3pq9CRlbZhAo8_rs_ivZikdYEsutvE0JaSv1LvBFL8Pds6bYhDXI2u9vSUSMebOfXonZo8OabmnKqQmFPja20jZqhsZ0-_0X15LaAZwFLNeC6pjJDVyAopBv7MwKzlYFFt9rHkUilMDpHJyAL5GF2sTjgAdW9bkg",
+  "payload": "e30"
+}
+2026-10-15 11:13:40,120:DEBUG:urllib3.connectionpool:https://localhost:14000 "POST /chalZ/q3gO1of8eEFtwQ3M_53kAUUroimAZab35DlNE8uMaDs HTTP/1.1" 200 197
+2026-10-15 11:13:40,120:DEBUG:acme.client:Received response:
+HTTP 200
+Cache-Control: public, max-age=0, no-cache
+Content-Type: application/json; charset=utf-8
+Link: <https://localhost:14000/dir>;rel="index", <https://localhost:14000/authZ/pUjvi1wrP0vgnB_mK2mB-5ansCI1ztifbXz10SDXFPU>;rel="up"
+Replay-Nonce: 8b0E28pavAuncpRRAUHSMQ
+Date: Thu, 15 Oct 2026 05:43:40 GMT
+Content-Length: 197
+
+{
+   "type": "http-01",
+   "url": "https://localhost:14000/chalZ/q3gO1of8eEFtwQ3M_53kAUUroimAZab35DlNE8uMaDs",
+   "token": "wC9F7Yd-mJDUNDQVq1e9LQjoRUrgoPie7d4RPdQ1lTs",
+   "status": "processing"
+}
+2026-10-15 11:13:40,120:DEBUG:acme.client:Storing nonce: 8b0E28pavAuncpRRAUHSMQ
+2026-10-15 11:13:40,121:INFO:certbot._internal.auth_handler:Waiting for verification...
+2026-10-15 11:13:41,126:DEBUG:acme.client:JWS payload:
+b''
+2026-10-15 11:13:41,129:DEBUG:acme.client:Sending POST request to https://localhost:14000/authZ/pUjvi1wrP0vgnB_mK2mB-5ansCI1ztifbXz10SDXFPU:
+{
+  "protected": "eyJhbGciOiAiUlMyNTYiLCAia2lkIjogImh0dHBzOi8vbG9jYWxob3N0OjE0MDAwL215LWFjY291bnQvNWMzOWUxMjAwZTJiNjE1OSIsICJub25jZSI6ICI4YjBFMjhwYXZBdW5jcFJSQVVIU01RIiwgInVybCI6ICJodHRwczovL2xvY2FsaG9zdDoxNDAwMC9hdXRoWi9wVWp2aTF3clAwdmduQl9tSzJtQi01YW5zQ0kxenRpZmJYejEwU0RYRlBVIn0",
+  "signature": "MzHu3r_0b3EKel83EGAWyYaHb-eCE1xkd_huQqN5eLAr0pvH4qREaZahBx8vfQU8FJW8SyiyhYklvJtLYdh7kNO8sgCcLArgaYrqiFHjvGTg7W7jvFyzfuDeQtEX1TkQd7n-NZOHwTeJm7QJmK2O-J9LIWig5iq4tfoE8IgzFh1Erx0k-KrBxMKiQTms0_UqP6ToVgjelyJMSxe5PwGlNHuIjUXUtbeSbnWNxBSj0xmh5PC9H7BmoJPX43LevUIZCuUMWn6cy1NVGr-tzmBVLpOH-z5pb0qtU8Mw6RChCBV91XXNfQW3pxwCzUfj_06oCoy6Q0TGRB5t3zBb09frUw",
+  "payload": ""
+}
+2026-10-15 11:13:41,134:DEBUG:urllib3.connectionpool:https://localhost:14000 "POST /authZ/pUjvi1wrP0vgnB_mK2mB-5ansCI1ztifbXz10SDXFPU HTTP/1.1" 200 906
+2026-10-15 11:13:41,134:DEBUG:acme.client:Received response:
+HTTP 200
+Cache-Control: public, max-age=0, no-cache
+Content-Type: application/json; charset=utf-8
+Link: <https://localhost:14000/dir>;rel="index"
+Replay-Nonce: uLe9iG2WvRSliGn9xt4qUg
+Date: Thu, 15 Oct 2026 05:43:41 GMT
+Content-Length: 906
+
+{
+   "status": "invalid",
+   "identifier": {
+      "type": "dns",
+      "value": "transaction-ms.test"
+   },
+   "challenges": [
+      {
+         "type": "http-01",
+         "url": "https://localhost:14000/chalZ/q3gO1of8eEFtwQ3M_53kAUUroimAZab35DlNE8uMaDs",
+         "token": "wC9F7Yd-mJDUNDQVq1e9LQjoRUrgoPie7d4RPdQ1lTs",
+         "status": "invalid",
+         "validated": "2026-10-15T05:43:40Z",
+         "error": {
+            "type": "urn:ietf:params:acme:error:connection",
+            "detail": "Get \"http://transaction-ms.test:5002/.well-known/acme-challenge/wC9F7Yd-mJDUNDQVq1e9LQjoRUrgoPie7d4RPdQ1lTs\": error occurred while resolving URL \"http://transaction-ms.test:5002/.well-known/acme-challenge/wC9F7Yd-mJDUNDQVq1e9LQjoRUrgoPie7d4RPdQ1lTs\": lookup transaction-ms.test on 127.0.0.11:53: no such host",
+            "status": 400
+         }
+      }
+   ],
+   "expires": "2026-10-15T06:43:39Z"
+}
+2026-10-15 11:13:41,135:DEBUG:acme.client:Storing nonce: uLe9iG2WvRSliGn9xt4qUg
+2026-10-15 11:13:41,135:INFO:certbot._internal.auth_handler:Challenge failed for domain transaction-ms.test
+2026-10-15 11:13:41,135:INFO:certbot._internal.auth_handler:http-01 challenge for Identifier(typ=IdentifierType(dns), value='transaction-ms.test')
+2026-10-15 11:13:41,135:DEBUG:certbot._internal.display.obj:Notifying user: 
+Certbot failed to authenticate some domains (authenticator: manual). The Certificate Authority reported these problems:
+  Identifier: transaction-ms.test
+  Type:   connection
+  Detail: Get "http://transaction-ms.test:5002/.well-known/acme-challenge/wC9F7Yd-mJDUNDQVq1e9LQjoRUrgoPie7d4RPdQ1lTs": error occurred while resolving URL "http://transaction-ms.test:5002/.well-known/acme-challenge/wC9F7Yd-mJDUNDQVq1e9LQjoRUrgoPie7d4RPdQ1lTs": lookup transaction-ms.test on 127.0.0.11:53: no such host
+
+Hint: The Certificate Authority failed to verify the challenge files created by the --manual-auth-hook. Ensure that this hook is functioning correctly. Refer to "certbot --help manual" and the Certbot User Guide.
+
+2026-10-15 11:13:41,167:DEBUG:certbot._internal.error_handler:Encountered exception:
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/auth_handler.py", line 104, in handle_authorizations
+    self._poll_authorizations(authzrs, max_retries, max_time_mins, best_effort)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/auth_handler.py", line 208, in _poll_authorizations
+    raise errors.AuthorizationError('Some challenges have failed.')
+certbot.errors.AuthorizationError: Some challenges have failed.
+
+2026-10-15 11:13:41,167:DEBUG:certbot._internal.error_handler:Calling registered functions
+2026-10-15 11:13:41,167:INFO:certbot._internal.auth_handler:Cleaning up challenges
+2026-10-15 11:13:41,167:INFO:certbot.compat.misc:Running manual-cleanup-hook command: /Users/keerthana/Desktop/mtls-poc/certbot/hooks/cleanup.sh
+2026-10-15 11:13:41,605:WARNING:certbot.display.ops:Hook '--manual-cleanup-hook' for transaction-ms.test reported error code 7
+2026-10-15 11:13:41,605:WARNING:certbot.display.ops:Hook '--manual-cleanup-hook' for transaction-ms.test ran with error output:
+ curl: (7) Failed to connect to 127.0.0.1 port 8055 after 1 ms: Couldn't connect to server
+2026-10-15 11:13:41,606:DEBUG:certbot._internal.log:Exiting abnormally:
+Traceback (most recent call last):
+  File "/opt/homebrew/bin/certbot", line 6, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/main.py", line 18, in main
+    return internal_main.main(cli_args)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/main.py", line 1889, in main
+    return config.func(config, plugins)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/main.py", line 1601, in certonly
+    lineage = _get_and_save_cert(le_client, config, sans, certname, lineage)
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/main.py", line 143, in _get_and_save_cert
+    lineage = le_client.obtain_and_enroll_certificate(sans, certname)
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/client.py", line 533, in obtain_and_enroll_certificate
+    cert, chain, key, _ = self.obtain_certificate(sans)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/client.py", line 434, in obtain_certificate
+    orderr = self._get_order_and_authorizations(csr.data, self.config.allow_subset_of_names)
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/client.py", line 512, in _get_order_and_authorizations
+    authzr = self.auth_handler.handle_authorizations(orderr, self.config, best_effort)
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/auth_handler.py", line 104, in handle_authorizations
+    self._poll_authorizations(authzrs, max_retries, max_time_mins, best_effort)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/certbot/5.8.0_1/libexec/lib/python3.15/site-packages/certbot/_internal/auth_handler.py", line 208, in _poll_authorizations
+    raise errors.AuthorizationError('Some challenges have failed.')
+certbot.errors.AuthorizationError: Some challenges have failed.
+2026-10-15 11:13:41,623:ERROR:certbot._internal.log:Some challenges have failed.
