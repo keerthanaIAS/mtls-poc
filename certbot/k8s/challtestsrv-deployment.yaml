@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: challtestsrv
+  namespace: certbot-poc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: challtestsrv
+  template:
+    metadata:
+      labels:
+        app: challtestsrv
+    spec:
+      containers:
+        - name: challtestsrv
+          image: ghcr.io/letsencrypt/pebble-challtestsrv:latest
+          args:
+            - "-defaultIPv6="
+            - "-defaultIPv4"
+            - "10.110.221.133"
+          ports:
+            - name: dns
+              containerPort: 8053
+              protocol: UDP
+            - name: api
+              containerPort: 8055
+            - name: challenge
+              containerPort: 5002
