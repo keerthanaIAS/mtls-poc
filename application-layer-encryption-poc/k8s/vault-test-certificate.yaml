@@ -1,0 +1,21 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: vault-issuance-test
+  namespace: application-layer-encryption
+spec:
+  secretName: vault-issuance-test-tls
+  issuerRef:
+    name: vault-pki
+    kind: Issuer
+  commonName: internal-service.application-layer-encryption.svc.cluster.local
+  dnsNames:
+    - internal-service.application-layer-encryption.svc.cluster.local
+  duration: 24h
+  renewBefore: 8h
+  privateKey:
+    algorithm: RSA
+    size: 2048
+  usages:
+    - server auth
+    - client auth

@@ -1,0 +1,22 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: internal-service-tls
+  namespace: application-layer-encryption
+spec:
+  secretName: internal-service-tls
+  issuerRef:
+    name: vault-pki
+    kind: Issuer
+  commonName: internal-service.application-layer-encryption.svc.cluster.local
+  dnsNames:
+    - internal-service
+    - internal-service.application-layer-encryption.svc.cluster.local
+  duration: 24h
+  renewBefore: 8h
+  privateKey:
+    algorithm: RSA
+    size: 2048
+  usages:
+    - server auth
+    - client auth

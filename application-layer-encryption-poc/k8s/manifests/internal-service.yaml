@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: internal-service
+  namespace: application-layer-encryption
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: internal-service
+  template:
+    metadata:
+      labels:
+        app: internal-service
+    spec:
+      containers:
+        - name: internal-service
+          image: application-internal-service:poc
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 9443
+          resources:
+            requests:
+              cpu: 150m
+              memory: 128Mi
+            limits:
+              cpu: 750m
+              memory: 256Mi
+          readinessProbe:
+            tcpSocket:
+              port: 9443
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 9443
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          volumeMounts:
+            - name: internal-certs
+              mountPath: /app/certs
+              readOnly: true
+      volumes:
+        - name: internal-certs
+          secret:
+            secretName: internal-certs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: internal-service
+  namespace: application-layer-encryption
+spec:
+  type: ClusterIP
+  selector:
+    app: internal-service
+  ports:
+    - name: https
+      port: 9443
+      targetPort: 9443

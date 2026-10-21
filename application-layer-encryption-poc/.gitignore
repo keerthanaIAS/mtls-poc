@@ -1,0 +1,6 @@
+certs/*.key
+certs/*.pem
+certs/*.csr
+certs/*.srl
+certs/*.crt
+!certs/payload-public.pem

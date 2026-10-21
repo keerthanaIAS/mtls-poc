@@ -1,0 +1,21 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: gateway-client-tls
+  namespace: application-layer-encryption
+spec:
+  secretName: gateway-client-tls
+  issuerRef:
+    name: vault-pki
+    kind: Issuer
+  commonName: gateway
+  dnsNames:
+    - gateway
+    - gateway.application-layer-encryption.svc.cluster.local
+  duration: 24h
+  renewBefore: 8h
+  privateKey:
+    algorithm: RSA
+    size: 2048
+  usages:
+    - client auth

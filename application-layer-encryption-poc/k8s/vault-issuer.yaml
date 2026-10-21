@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: vault-pki
+  namespace: application-layer-encryption
+spec:
+  vault:
+    server: http://vault.vault.svc:8200
+    path: pki/sign/application-layer-encryption
+    auth:
+      tokenSecretRef:
+        name: vault-issuer-token
+        key: token
