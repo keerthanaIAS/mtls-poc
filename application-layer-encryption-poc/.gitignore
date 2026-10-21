@@ -4,3 +4,23 @@ certs/*.csr
 certs/*.srl
 certs/*.crt
 !certs/payload-public.pem
+# Vault secrets and initialization data
+**/backups/vault/init-keys.json
+**/*unseal*
+**/*root-token*
+
+# Private keys and local certificates
+**/*.key
+**/*.pem
+**/*.p12
+**/*.pfx
+
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Logs and temporary files
+*.log
+*.tmp
+.DS_Store
