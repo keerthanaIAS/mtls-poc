@@ -117,10 +117,22 @@ function validateRequest(data, path) {
     }
   }
 
+
+  if (path === '/fund-transfer' || path === '/refund') {
+    if (
+      typeof data.fromAccount !== 'string' ||
+      !data.fromAccount.trim() ||
+      typeof data.toAccount !== 'string' ||
+      !data.toAccount.trim()
+    ) {
+      return 'Invalid account details';
+    }
+  }
+
   if (path === '/fund-transfer' || path === '/refund') {
     if (typeof data.amount !== 'number' ||
-        !Number.isFinite(data.amount) ||
-        data.amount <= 0) {
+      !Number.isFinite(data.amount) ||
+      data.amount <= 0) {
       return 'Invalid amount';
     }
   }
