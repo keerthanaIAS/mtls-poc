@@ -12,6 +12,8 @@ spec:
     metadata:
       labels:
         app: gateway
+      annotations:
+        secret.reloader.stakater.com/reload: "gateway-certs"
     spec:
       containers:
         - name: gateway

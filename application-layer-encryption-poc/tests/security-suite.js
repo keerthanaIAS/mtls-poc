@@ -41,6 +41,7 @@ function send(path, body) {
   return new Promise((resolve, reject) => {
     const req = https.request({
       hostname: '127.0.0.1',
+      servername: 'gateway.application-layer-encryption.svc.cluster.local',
       port: 8443,
       path,
       method: 'POST',

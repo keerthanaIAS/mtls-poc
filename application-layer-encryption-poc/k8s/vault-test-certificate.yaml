@@ -11,8 +11,8 @@ spec:
   commonName: internal-service.application-layer-encryption.svc.cluster.local
   dnsNames:
     - internal-service.application-layer-encryption.svc.cluster.local
-  duration: 24h
-  renewBefore: 8h
+  duration: 5h
+  renewBefore: 1h
   privateKey:
     algorithm: RSA
     size: 2048

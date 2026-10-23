@@ -1,0 +1,122 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: certbot-runner
+  namespace: application-layer-certbot
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: certbot-runner
+  namespace: application-layer-certbot
+rules:
+  - apiGroups: [""]
+    resources: ["secrets", "configmaps"]
+    verbs: ["get", "create", "update", "patch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: certbot-runner
+  namespace: application-layer-certbot
+subjects:
+  - kind: ServiceAccount
+    name: certbot-runner
+    namespace: application-layer-certbot
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: certbot-runner
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: certbot-data
+  namespace: application-layer-certbot
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: certbot-script
+  namespace: application-layer-certbot
+data:
+  certbot-run.sh: |
+    PLACEHOLDER
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: internal-service-oneway-nginx
+  namespace: application-layer-certbot
+data:
+  nginx.conf: |
+    events {}
+    http {
+      server {
+        listen 9443 ssl;
+        server_name internal-service.application-layer-encryption.svc.cluster.local;
+        ssl_certificate /etc/nginx/tls/tls.crt;
+        ssl_certificate_key /etc/nginx/tls/tls.key;
+        location / {
+          default_type text/plain;
+          return 200 "one-way TLS endpoint OK\n";
+        }
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: internal-service-oneway
+  namespace: application-layer-certbot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: internal-service-oneway
+  template:
+    metadata:
+      labels:
+        app: internal-service-oneway
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          ports:
+            - containerPort: 9443
+          volumeMounts:
+            - name: tls
+              mountPath: /etc/nginx/tls
+              readOnly: true
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: nginx.conf
+      volumes:
+        - name: tls
+          secret:
+            secretName: certbot-internal-service-tls
+        - name: nginx-config
+          configMap:
+            name: internal-service-oneway-nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: internal-service-oneway
+  namespace: application-layer-certbot
+spec:
+  selector:
+    app: internal-service-oneway
+  ports:
+    - name: https
+      port: 9443
+      targetPort: 9443

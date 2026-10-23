@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: certbot-renewal
+  namespace: application-layer-certbot
+spec:
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      activeDeadlineSeconds: 300
+      template:
+        spec:
+          restartPolicy: Never
+          serviceAccountName: certbot-runner
+          containers:
+            - name: certbot
+              image: application-layer-certbot:local
+              imagePullPolicy: IfNotPresent
+              command: ["/bin/sh", "/scripts/certbot-run.sh"]
+              env:
+                - name: RUN_MODE
+                  value: "renew"
+              volumeMounts:
+                - name: certbot-data
+                  mountPath: /etc/letsencrypt
+                - name: scripts
+                  mountPath: /scripts
+          volumes:
+            - name: certbot-data
+              persistentVolumeClaim:
+                claimName: certbot-data
+            - name: scripts
+              configMap:
+                name: certbot-script
